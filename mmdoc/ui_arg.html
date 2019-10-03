@@ -1,0 +1,494 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ui_arg</title>
+  <meta name="keywords" content="ui_arg">
+  <meta name="description" content="Argument manager interface">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>ui_arg
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Argument manager interface</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = ui_arg(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Argument manager interface
+ format varargout = ui_arg(varargin)
+ The idea of this routine is to have a separate description of the arguments 
+ from the main program (to be able to add or modify arguments)
+
+ ui_arg is based on spm_input_ui and spm_get, then handles most forms of interactive user input.
+ (see spm_input or spm_get for details.)
+
+ 
+ 
+ accept one or two input argument : arg = ui_arg(s_arg,'field') or arg = ui_arg(s_arg);
+     s_arg or s_arg.el must be a valid structure of ui_arg type that contain different field.
+     s_arg.title (optional) : title of the window.
+    s_arg.description (optional): Give information or help. 
+     s_arg.ProgType (required) : type of the argument (file,dir,edit,contrast,choice)
+    s_arg.input    (required) : argument parameters 
+                     s_arg.input.prompt : all type of argument
+                    s_arg.input.filter : file or dir type
+                     s_arg.input.base   : dir type 
+                    s_arg.input.nb     : file type 
+                     s_arg.input.etype  : edit type 
+                            (string,string+,natural,whole,real,evaluated)
+                             as defined in spm_input.
+                    s_arg.input.def    : edit,choices 
+================================================================================
+-  Copyright (C) 1997-2002 CEA
+-  This software and supporting documentation were developed by
+-       CEA/DSV/SHFJ/UNAF
+-       4 place du General Leclerc
+-       91401 Orsay cedex
+-       France
+================================================================================
+- kherif ferath
+</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+<li><a href="mm_arg.html" class="code" title="function varargout = mm_arg(typeAnal, argfile)">mm_arg</a>	Get arguments for MLM/SVD analysis.</li>
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function varargout = sf_get_arg(title,s_arg)</a></li>
+<li><a href="#_sub2" class="code">function [s_arg, ok] = sf_uiArgCheck(s_arg)</a></li>
+<li><a href="#_sub3" class="code">function F=sf_uiArgInit</a></li>
+</ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = ui_arg(varargin)</a>
+0002 <span class="comment">% Argument manager interface</span>
+0003 <span class="comment">% format varargout = ui_arg(varargin)</span>
+0004 <span class="comment">% The idea of this routine is to have a separate description of the arguments</span>
+0005 <span class="comment">% from the main program (to be able to add or modify arguments)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% ui_arg is based on spm_input_ui and spm_get, then handles most forms of interactive user input.</span>
+0008 <span class="comment">% (see spm_input or spm_get for details.)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% accept one or two input argument : arg = ui_arg(s_arg,'field') or arg = ui_arg(s_arg);</span>
+0013 <span class="comment">%     s_arg or s_arg.el must be a valid structure of ui_arg type that contain different field.</span>
+0014 <span class="comment">%     s_arg.title (optional) : title of the window.</span>
+0015 <span class="comment">%    s_arg.description (optional): Give information or help.</span>
+0016 <span class="comment">%     s_arg.ProgType (required) : type of the argument (file,dir,edit,contrast,choice)</span>
+0017 <span class="comment">%    s_arg.input    (required) : argument parameters</span>
+0018 <span class="comment">%                     s_arg.input.prompt : all type of argument</span>
+0019 <span class="comment">%                    s_arg.input.filter : file or dir type</span>
+0020 <span class="comment">%                     s_arg.input.base   : dir type</span>
+0021 <span class="comment">%                    s_arg.input.nb     : file type</span>
+0022 <span class="comment">%                     s_arg.input.etype  : edit type</span>
+0023 <span class="comment">%                            (string,string+,natural,whole,real,evaluated)</span>
+0024 <span class="comment">%                             as defined in spm_input.</span>
+0025 <span class="comment">%                    s_arg.input.def    : edit,choices</span>
+0026 <span class="comment">%================================================================================</span>
+0027 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0028 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0029 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0030 <span class="comment">%-       4 place du General Leclerc</span>
+0031 <span class="comment">%-       91401 Orsay cedex</span>
+0032 <span class="comment">%-       France</span>
+0033 <span class="comment">%================================================================================</span>
+0034 <span class="comment">%- kherif ferath</span>
+0035 
+0036 
+0037 <span class="keyword">if</span> (nargin &lt; 1)
+0038     <span class="keyword">return</span>;
+0039 <span class="keyword">end</span>
+0040 
+0041 s_arg = varargin{1};
+0042 
+0043 <span class="keyword">if</span> ~(isstruct(s_arg))
+0044     error(<span class="string">'Input argument : not a structure'</span>);
+0045     <span class="keyword">return</span>;
+0046 <span class="keyword">end</span> 
+0047 
+0048 <span class="keyword">if</span> (nargin &gt; 1)  
+0049     s_arg_el    = varargin{2};
+0050     <span class="keyword">if</span> ~(isfield(s_arg,s_arg_el)) 
+0051         error(sprintf(<span class="string">'invalid field : %s'</span>,s_arg_el));
+0052     <span class="keyword">end</span>
+0053     s_arg_el    = getfield(s_arg,s_arg_el);
+0054     <span class="keyword">if</span> (isfield(s_arg,<span class="string">'title'</span>))
+0055         title    = getfield(s_arg,<span class="string">'title'</span>);
+0056     <span class="keyword">elseif</span> isfield(s_arg_el,<span class="string">'prompt'</span>)
+0057         title    = getfiel(s_arg_el,<span class="string">'prompt'</span>)
+0058     <span class="keyword">else</span> title = <span class="string">''</span>; <span class="comment">%**** == before (jb)</span>
+0059     <span class="keyword">end</span>
+0060     
+0061     varargout{1}    = <a href="#_sub1" class="code" title="subfunction varargout = sf_get_arg(title,s_arg)">sf_get_arg</a>(title,s_arg_el);
+0062     <span class="keyword">return</span>    
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">if</span> isfield(s_arg, <span class="string">'prompt'</span>)
+0066     title    = getfield(s_arg,<span class="string">'prompt'</span>);
+0067 <span class="keyword">else</span> title = <span class="string">''</span>;
+0068 <span class="keyword">end</span>
+0069 
+0070 varargout{1}    = <a href="#_sub1" class="code" title="subfunction varargout = sf_get_arg(title,s_arg)">sf_get_arg</a>(title,s_arg);
+0071 
+0072 
+0073 
+0074 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0075 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0076 <span class="comment">% SUB FUNCTIONS</span>
+0077 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0078 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0079 
+0080 
+0081 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0082 <a name="_sub1" href="#_subfunctions" class="code">function varargout = sf_get_arg(title,s_arg)</a>
+0083 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0084 <span class="comment">%- Get the arguments by launching spm_input or spm_get</span>
+0085 <span class="comment">%- updates the description window W.des</span>
+0086 <span class="comment">%- updates the title window : W.title</span>
+0087 <span class="comment">%- updates the main window : W.main</span>
+0088 <span class="comment">%</span>
+0089 <span class="comment">%- s_arg : description above</span>
+0090 <span class="comment">%- title : string with the name of the main window</span>
+0091     
+0092     [s_arg, ok] = <a href="#_sub2" class="code" title="subfunction [s_arg, ok] = sf_uiArgCheck(s_arg)">sf_uiArgCheck</a>(s_arg);
+0093     
+0094     <span class="keyword">if</span> ~ok 
+0095        error(sprintf(<span class="string">'Imcompatible argument structure ...\n type help ui_arg for details'</span>));    
+0096     <span class="keyword">end</span>
+0097     Location=10.5;            <span class="comment">%default location of the spm_input</span>
+0098     F    = <a href="#_sub3" class="code" title="subfunction F=sf_uiArgInit">sf_uiArgInit</a>;     <span class="comment">% Initialise gui</span>
+0099     set(F,<span class="string">'unit'</span>,<span class="string">'pix'</span>);
+0100     W    = get(F,<span class="string">'UserData'</span>);     <span class="comment">% get Info saved in the main window.</span>
+0101     
+0102     <span class="comment">% and now, we can put all the info and prompt for the input:</span>
+0103     
+0104     set(W.main,<span class="string">'name'</span>,title)     <span class="comment">% Rename the main window.</span>
+0105     <span class="keyword">if</span> ~(isfield(s_arg,<span class="string">'prompt'</span>))     s_arg.prompt = <span class="string">''</span>; <span class="keyword">end</span>;
+0106     set(W.title,<span class="string">'string'</span>, s_arg.prompt);
+0107     <span class="keyword">if</span> ~(isfield(s_arg,<span class="string">'description'</span>)) s_arg.description = <span class="string">'No description'</span>; <span class="keyword">end</span>; 
+0108     set(W.des,<span class="string">'string'</span>,deblank(s_arg.description));
+0109     set(W.des,<span class="string">'Value'</span>,[]);
+0110     oldtag = get(W.main,<span class="string">'tag'</span>);
+0111     set(W.main,<span class="string">'tag'</span>,<span class="string">''</span>);
+0112     set(0,<span class="string">'currentfigure'</span>,W.main);
+0113     
+0114     
+0115     <span class="keyword">switch</span> s_arg.ProgType
+0116         <span class="keyword">case</span> <span class="string">'choice'</span>
+0117           ok=<span class="string">'B'</span>;
+0118         <span class="keyword">case</span> <span class="string">'string'</span>
+0119           ok=<span class="string">'I'</span>;  IType=<span class="string">'s'</span>;
+0120         <span class="keyword">case</span> <span class="string">'string+'</span>
+0121           ok=<span class="string">'I'</span>;  IType=<span class="string">'s+'</span>;  
+0122         <span class="keyword">case</span> <span class="string">'evaluated'</span>
+0123           ok=<span class="string">'I'</span>;  IType=<span class="string">'e'</span>;
+0124         <span class="keyword">case</span> <span class="string">'natural'</span>
+0125           ok=<span class="string">'I'</span>;  IType=<span class="string">'n'</span>;
+0126         <span class="keyword">case</span> <span class="string">'whole'</span>
+0127           ok=<span class="string">'I'</span>;  IType=<span class="string">'w'</span>;
+0128         <span class="keyword">case</span> <span class="string">'integer'</span>
+0129           ok=<span class="string">'I'</span>;  IType=<span class="string">'i'</span>;
+0130         <span class="keyword">case</span> <span class="string">'real'</span> 
+0131           ok=<span class="string">'I'</span>;  IType=<span class="string">'r'</span>;
+0132         <span class="keyword">case</span> <span class="string">'contrast'</span>
+0133           ok=<span class="string">'GC'</span>; IType=<span class="string">'cid'</span>;
+0134         <span class="keyword">case</span> <span class="string">'dir'</span>
+0135           ok=<span class="string">'G'</span>;  IType=<span class="string">'dir'</span>;
+0136         <span class="keyword">case</span> <span class="string">'file'</span>
+0137           ok=<span class="string">'G'</span>;  IType=<span class="string">'file'</span>; 
+0138     
+0139     
+0140     <span class="keyword">otherwise</span>
+0141         error(<span class="string">'invalid input Type'</span>);
+0142     <span class="keyword">end</span>
+0143     
+0144     <span class="keyword">if</span> (ok==<span class="string">'I'</span>)
+0145         varargout{1} = spm_input(s_arg.input.prompt,Location,IType,s_arg.input.def,s_arg.input.req);
+0146     <span class="keyword">elseif</span> (ok==<span class="string">'G'</span>)
+0147         <span class="keyword">if</span> (strcmp(IType,<span class="string">'dir'</span>))
+0148            cb = sprintf(<span class="string">'ui_arg_res=spm_get(-1,''%s'',''%s'');uiresume(UD.fig);'</span>,<span class="keyword">...</span>
+0149                     s_arg.input.filter,s_arg.input.prompt,s_arg.input.base);
+0150         <span class="keyword">end</span>
+0151         <span class="keyword">if</span> (strcmp(IType,<span class="string">'file'</span>))
+0152             cb = sprintf(<span class="string">'ui_arg_res=spm_get(%s,''%s'',''%s'');uiresume(UD.fig);'</span>,<span class="keyword">...</span>
+0153                 s_arg.input.nb,s_arg.input.filter,s_arg.input.prompt);
+0154         <span class="keyword">end</span>
+0155         UD.fig=F;
+0156         cb=sprintf(<span class="string">'%s data=get(UD.fig,''UserData'');data.ans={ui_arg_res};set(UD.fig,''UserData'',data);'</span>,cb);
+0157         
+0158         spm_input_ui(s_arg.input.prompt,Location,<span class="string">'b!'</span>,<span class="string">'Browse'</span>,char(cb),UD,1);
+0159         uiwait(F);
+0160         data=get(F,<span class="string">'UserData'</span>);
+0161         clear UD;
+0162         varargout{1}=data.ans{1};
+0163             
+0164             
+0165     <span class="keyword">elseif</span> (ok==<span class="string">'B'</span>)
+0166         <span class="keyword">if</span> isempty(s_arg.input.values)
+0167          varargout{1} = spm_input(s_arg.input.prompt,Location,<span class="string">'b'</span>,s_arg.input.label);
+0168         <span class="keyword">else</span>
+0169          varargout{1} = spm_input(s_arg.input.prompt,Location,<span class="string">'b'</span>,s_arg.input.label,s_arg.input.values,s_arg.input.def);
+0170          <span class="keyword">end</span>
+0171     
+0172     <span class="keyword">else</span>
+0173         <span class="keyword">if</span> (strcmp(IType,<span class="string">'cid'</span>))
+0174             UD.xX= s_arg.input.xX;
+0175         UD.xCon= s_arg.input.xCon;
+0176         UD.fig=F;
+0177             cb = sprintf(<span class="string">'[ui_arg_res1 ui_arg_res2] = spm_conman(UD.xX,UD.xCon,''T|F'',1,''%s'','' '',1);uiresume(UD.fig);'</span>,<span class="keyword">...</span>
+0178             s_arg.input.prompt); <span class="comment">%</span>
+0179         cb = sprintf(<span class="string">'%s data = get(UD.fig,''UserData'');data.ans={ui_arg_res1 ,ui_arg_res2};set(UD.fig,''UserData'',data)'</span>,cb);
+0180         h = spm_input_ui(<span class="string">''</span>,Location,<span class="string">'b!'</span>,<span class="string">'select a contrast'</span>,char(cb),UD,1);
+0181         uiwait(F);
+0182         data = get(F,<span class="string">'UserData'</span>);
+0183         clear UD;
+0184         varargout{1} = data.ans;
+0185         <span class="keyword">end</span>
+0186     end        
+0187 spm_input_ui(<span class="string">'!DeleteInputObj'</span>,F);
+0188 set(F,<span class="string">'tag'</span>,<span class="string">'uiArgFigure'</span>);
+0189 set(F,<span class="string">'unit'</span>,<span class="string">'norm'</span>);
+0190 set(W.title,<span class="string">'string'</span>, <span class="string">''</span>); 
+0191 set(W.des,<span class="string">'string'</span>,<span class="string">''</span>);
+0192 set(W.des,<span class="string">'Value'</span>,[]);
+0193 set(W.main,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0194 drawnow
+0195 
+0196 
+0197 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0198 <a name="_sub2" href="#_subfunctions" class="code">function [s_arg, ok] = sf_uiArgCheck(s_arg)</a>
+0199 <span class="comment">%-------------------------------------------------------------------------------------------    </span>
+0200 <span class="comment">%</span>
+0201 <span class="comment">% Check that the s_arg structure is well constructed</span>
+0202 <span class="comment">% If fields are missing, they will be added and some defaults values are set</span>
+0203 <span class="comment">% returns an error if necessary fields are missing.</span>
+0204 <span class="comment">%</span>
+0205     
+0206     <span class="keyword">if</span> ~(isfield(s_arg,<span class="string">'ProgType'</span>))
+0207         ok=0;
+0208         <span class="keyword">return</span>;
+0209     <span class="keyword">end</span>
+0210     
+0211     validProgType = {<span class="string">'directory'</span> <span class="string">'file'</span> <span class="string">'edit'</span> <span class="string">'choice'</span> <span class="string">'contrast'</span>};
+0212     typMatch = strmatch(s_arg.ProgType,validProgType);
+0213     <span class="keyword">if</span> (isempty(typMatch))
+0214         ok=0;
+0215         <span class="keyword">return</span>;
+0216     <span class="keyword">end</span>
+0217     <span class="keyword">switch</span> validProgType{typMatch(1,1)}
+0218         
+0219         <span class="keyword">case</span> <span class="string">'directory'</span>
+0220             <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'filter'</span>))
+0221                 s_arg.input.filter=<span class="string">''</span>;
+0222             <span class="keyword">end</span>
+0223             
+0224             <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'base'</span>))
+0225                 s_arg.input.base=<span class="string">''</span>;
+0226             <span class="keyword">end</span>
+0227         <span class="keyword">case</span> <span class="string">'file'</span>
+0228             <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'filter'</span>))
+0229                 s_arg.input.filter=<span class="string">''</span>;
+0230             <span class="keyword">end</span>
+0231             
+0232             <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'nb'</span>))
+0233                 s_arg.input.nb=<span class="string">'inf'</span>;
+0234             <span class="keyword">end</span>
+0235         
+0236         <span class="keyword">case</span> <span class="string">'choice'</span>
+0237               <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'label'</span>))
+0238                       ok=0; 
+0239                   <span class="keyword">return</span>;
+0240               <span class="keyword">end</span>
+0241     
+0242               <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'values'</span>))
+0243                       s_arg.input.values=<span class="string">''</span>;
+0244               <span class="keyword">end</span>
+0245               
+0246               <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'def'</span>))
+0247                       s_arg.input.def=<span class="string">''</span>;
+0248               <span class="keyword">end</span>
+0249         <span class="keyword">case</span> <span class="string">'edit'</span>
+0250             
+0251                <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'etype'</span>))
+0252                        s_arg.input.etype=<span class="string">'evaluated'</span>;
+0253                <span class="keyword">end</span>
+0254                validEdit={<span class="string">'string'</span> <span class="string">'string+'</span> <span class="string">'evaluated'</span> <span class="string">'whole'</span> <span class="string">'integer'</span> <span class="string">'real'</span>};
+0255                EMatch = strmatch(s_arg.input.etype,validEdit);
+0256                <span class="keyword">if</span> (isempty(EMatch))
+0257                    ok=0;
+0258                    <span class="keyword">return</span>;
+0259                <span class="keyword">end</span>
+0260               s_arg.ProgType= validEdit{EMatch(1,1)};
+0261               <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'def'</span>))
+0262                       s_arg.input.def=<span class="string">''</span>;
+0263               <span class="keyword">end</span>
+0264               
+0265               <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'req'</span>))
+0266                       s_arg.input.req=<span class="string">''</span>;
+0267               <span class="keyword">end</span>
+0268               
+0269               
+0270         
+0271         <span class="keyword">case</span> <span class="string">'contrast'</span>
+0272              <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'xX'</span>))
+0273                       ok=0;
+0274                  <span class="keyword">return</span>
+0275              <span class="keyword">end</span>
+0276              <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'xCon'</span>))
+0277                       ok=0;
+0278                       <span class="keyword">return</span>
+0279              <span class="keyword">end</span>
+0280              
+0281              
+0282         
+0283         <span class="keyword">otherwise</span>
+0284              ok = 0;
+0285         <span class="keyword">return</span>;
+0286     <span class="keyword">end</span>    
+0287     <span class="keyword">if</span> ~(isfield(s_arg.input,<span class="string">'prompt'</span>))
+0288         
+0289         s_arg.input.prompt = <span class="string">''</span>;
+0290     <span class="keyword">end</span>
+0291     
+0292     ok=1;      
+0293     
+0294 
+0295 <span class="comment">%-------------------------------------------------------------------------------------------</span>
+0296 <a name="_sub3" href="#_subfunctions" class="code">function F=sf_uiArgInit</a>
+0297 <span class="comment">%-------------------------------------------------------------------------------------------    </span>
+0298 <span class="comment">%</span>
+0299 <span class="comment">% Construction of the interface window for ui_arg.</span>
+0300 <span class="comment">%</span>
+0301 <span class="comment">%     </span>
+0302     
+0303     F    = <span class="string">'uiArgFigure'</span>;
+0304     F    = spm_figure(<span class="string">'FindWin'</span>,F);
+0305     PF        = spm_platform(<span class="string">'fonts'</span>);
+0306     It    = spm_figure(<span class="string">'FindWin'</span>,<span class="string">'Interactive'</span>);
+0307     <span class="keyword">if</span> (It) delete(It); <span class="keyword">end</span>
+0308     <span class="keyword">if</span> (F)
+0309         set(F,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0310         data = get(F,<span class="string">'UserData'</span>);
+0311         data.ans=[];  
+0312         set(F,<span class="string">'UserData'</span>,data);
+0313     <span class="keyword">else</span>
+0314         
+0315         oldRootUnits = get(0,<span class="string">'Units'</span>);
+0316    set(0, <span class="string">'Units'</span>, <span class="string">'points'</span>);
+0317    
+0318    pixfactor = (72/get(0,<span class="string">'screenpixelsperinch'</span>))*1.1;
+0319    figurePos=get(0,<span class="string">'DefaultFigurePosition'</span>);
+0320    figurePos(3:4)=[450 335];
+0321    figurePos = figurePos * pixfactor;
+0322    rootScreenSize = get(0,<span class="string">'ScreenSize'</span>);
+0323    <span class="keyword">if</span> ((figurePos(1) &lt; 1) <span class="keyword">...</span>
+0324          | (figurePos(1)+figurePos(3) &gt; rootScreenSize(3)))
+0325       figurePos(1) = 30;
+0326    <span class="keyword">end</span>
+0327    set(0, <span class="string">'Units'</span>, oldRootUnits);
+0328    <span class="keyword">if</span> ((figurePos(2)+figurePos(4)+60 &gt; rootScreenSize(4)) <span class="keyword">...</span>
+0329             | (figurePos(2) &lt; 1))
+0330      figurePos(2) = rootScreenSize(4) - figurePos(4) - 60;
+0331   <span class="keyword">end</span>
+0332   
+0333   
+0334  COLOUR=[0.7 0.7 0.7];
+0335  
+0336         w.main = figure(<span class="string">'Color'</span>,[0.8 0.8 0.8], <span class="keyword">...</span>
+0337                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0338                <span class="string">'Position'</span>,figurePos, <span class="keyword">...</span>
+0339                <span class="string">'Tag'</span>,<span class="string">'uiArgFigure'</span>, <span class="keyword">...</span><span class="comment">,</span>
+0340                <span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0341                <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0342                <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0343                <span class="string">'ToolBar'</span>,<span class="string">'none'</span>);
+0344            w.f1 = uicontrol(<span class="string">'Parent'</span>,w.main, <span class="keyword">...</span>
+0345                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0346                <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0347                <span class="string">'BackgroundColor'</span>,COLOUR, <span class="keyword">...</span>
+0348                <span class="string">'Position'</span>,[0 0 450 335]*pixfactor, <span class="keyword">...</span>
+0349                <span class="string">'Style'</span>,<span class="string">'frame'</span>, <span class="keyword">...</span>
+0350                <span class="string">'Tag'</span>,<span class="string">'Frame1'</span>);
+0351            w.f2 = uicontrol(<span class="string">'Parent'</span>,w.main, <span class="keyword">...</span>
+0352                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0353                <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0354                <span class="string">'BackgroundColor'</span>,COLOUR, <span class="keyword">...</span>
+0355                <span class="string">'Position'</span>,[5 294.4 435 35]*pixfactor, <span class="keyword">...</span>
+0356                <span class="string">'Style'</span>,<span class="string">'frame'</span>, <span class="keyword">...</span>
+0357                <span class="string">'Tag'</span>,<span class="string">'Frame2'</span>);
+0358            w.f3 = uicontrol(<span class="string">'Parent'</span>,w.main, <span class="keyword">...</span>
+0359                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0360                <span class="string">'BackgroundColor'</span>,COLOUR, <span class="keyword">...</span>
+0361                <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0362                <span class="string">'Position'</span>,[5 150 435 125]*pixfactor, <span class="keyword">...</span>
+0363                <span class="string">'Style'</span>,<span class="string">'frame'</span>, <span class="keyword">...</span>
+0364                <span class="string">'Tag'</span>,<span class="string">'Frame3'</span>);
+0365            w.des = uicontrol(<span class="string">'Parent'</span>,w.main, <span class="keyword">...</span>
+0366                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0367                <span class="string">'FontSize'</span>,10, <span class="keyword">...</span>
+0368                <span class="string">'FontName'</span>,PF.courier, <span class="keyword">...</span>
+0369                <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>, <span class="keyword">...</span>
+0370                <span class="string">'Min'</span>, 0, <span class="keyword">...</span>
+0371                <span class="string">'Max'</span>, 2, <span class="keyword">...</span>
+0372                <span class="string">'BackgroundColor'</span>,[1 1 1]*0.95, <span class="keyword">...</span>
+0373                <span class="string">'Position'</span>,[10 152 425 120]*pixfactor, <span class="keyword">...</span>
+0374                <span class="string">'String'</span>,<span class="string">' '</span>, <span class="keyword">...</span>
+0375                <span class="string">'Style'</span>,<span class="string">'list'</span>, <span class="keyword">...</span>
+0376                <span class="string">'Callback'</span>, <span class="string">'set(gcbo,''value'',[]);'</span>, <span class="keyword">...</span>
+0377                <span class="string">'Tag'</span>,<span class="string">'Listbox1'</span>, <span class="keyword">...</span>
+0378                <span class="string">'Value'</span>,[]);
+0379            w.title = uicontrol(<span class="string">'Parent'</span>,w.main, <span class="keyword">...</span>
+0380                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0381                <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>, <span class="keyword">...</span>
+0382                <span class="string">'Enable'</span>, <span class="string">'inactive'</span>, <span class="keyword">...</span>
+0383                <span class="string">'BackgroundColor'</span>,[1 1 1]*0.95, <span class="keyword">...</span>
+0384                <span class="string">'FontSize'</span>,14, <span class="keyword">...</span>
+0385                <span class="string">'FontWeight'</span>,<span class="string">'demi'</span>, <span class="keyword">...</span>
+0386                <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0387                <span class="string">'Position'</span>,[8.8 298 428 28]*pixfactor, <span class="keyword">...</span>
+0388                <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0389                <span class="string">'Tag'</span>,<span class="string">'StaticText1'</span>);
+0390            w.label = uicontrol(<span class="string">'Parent'</span>,w.main, <span class="keyword">...</span>
+0391                <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0392                <span class="string">'BackgroundColor'</span>,COLOUR, <span class="keyword">...</span>
+0393                <span class="string">'FontSize'</span>,12, <span class="keyword">...</span>
+0394                <span class="string">'FontWeight'</span>,<span class="string">'demi'</span>, <span class="keyword">...</span>
+0395                <span class="string">'ForegroundColor'</span>,[1 0 0], <span class="keyword">...</span>
+0396                <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>, <span class="keyword">...</span>
+0397                <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0398                <span class="string">'Position'</span>,[6.4 273.6 128 19.2]*pixfactor, <span class="keyword">...</span>
+0399                <span class="string">'String'</span>,<span class="string">'Description ...'</span>, <span class="keyword">...</span>
+0400                <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0401                <span class="string">'Tag'</span>,<span class="string">'StaticText2'</span>);
+0402            w.ans=[];
+0403            set(w.main,<span class="string">'UserData'</span>,w);
+0404            set([w.main w.f1 w.f2 w.f3 w.des w.label w.title],<span class="keyword">...</span>
+0405                    <span class="string">'Units'</span>,<span class="string">'normalized'</span>);
+0406            F=w.main;
+0407  <span class="keyword">end</span>
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mm_cpypy</title>
+  <meta name="keywords" content="mm_cpypy">
+  <meta name="description" content="- compute y'y (time x time) dispersion matrix.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>mm_cpypy
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>- compute y'y (time x time) dispersion matrix.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [YpY,Nvox]=mm_cpypy(typeAnal,nbsub,P,Mask,Res,paramsAnal,gsf,K,W) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [YpY,Nvox]=mm_cpypy(typeAnal,nbsub,P,Mask,Res,paramsAnal,gsf,K,W)</a>
+0002   
+0003 <span class="comment">%- compute y'y (time x time) dispersion matrix.</span>
+0004 <span class="comment">%- Compute only for the voxels in the mask.</span>
+0005 <span class="comment">%- Data can be filtered or/and normalized.</span>
+0006 <span class="comment">%-</span>
+0007 <span class="comment">%================================================================================</span>
+0008 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0009 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0010 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0011 <span class="comment">%-       4 place du General Leclerc</span>
+0012 <span class="comment">%-       91401 Orsay cedex</span>
+0013 <span class="comment">%-       France</span>
+0014 <span class="comment">%================================================================================</span>
+0015 
+0016 
+0017   
+0018     
+0019   hold=0;   <span class="comment">% interpolation method</span>
+0020   sub = 1;  <span class="comment">% subject 1</span>
+0021   [dimt tmp] = size(P{1}); <span class="comment">% temporal dimension</span>
+0022   Nvox = 0;
+0023   
+0024 
+0025   <span class="comment">%====================================================================</span>
+0026   
+0027   
+0028   
+0029   YpY = zeros(dimt);
+0030   
+0031   memchunk = 2^24; <span class="comment">%chunk size</span>
+0032   sizeVox  = ceil((memchunk/dimt/8)); <span class="comment">% 8 = sizeof(double)</span>
+0033   
+0034   <span class="keyword">for</span> sub=1:nbsub
+0035     
+0036     
+0037     Nvox(sub)=0;
+0038     
+0039     V  = spm_vol(P{sub});
+0040     
+0041     <span class="comment">%-    Normalisation by the scaling factor, if needed</span>
+0042     <span class="comment">%--------------------------------------------------------------------</span>
+0043     
+0044        sf=gsf{sub}; <span class="comment">%scaling factor for the subject sub</span>
+0045        
+0046       <span class="keyword">for</span> v=1:dimt
+0047         V(v,1).pinfo(1:2,:) = V(v,1).pinfo(1:2,:)*sf(v,1);
+0048       <span class="keyword">end</span>
+0049 
+0050    
+0051     
+0052     
+0053     Vm = spm_vol(Mask{sub}); <span class="comment">% Map Mask data</span>
+0054     Vr=spm_vol(Res{sub});    <span class="comment">% Map Res data</span>
+0055     
+0056     <span class="comment">%compute mean spm_MskMean</span>
+0057       
+0058      
+0059           
+0060       
+0061     
+0062     
+0063     nbp = sizeVox/prod(V(1).dim(1:2));
+0064     nbp = min(max(1,round(nbp)),V(1).dim(3));
+0065     all_nbp=length(1:nbp:V(1).dim(3));
+0066     
+0067     <span class="keyword">for</span> p = 1:nbp:V(1).dim(3)
+0068       
+0069       
+0070       <span class="comment">% lire le mask pour le chunk p dans plm</span>
+0071       <span class="comment">% lire les residu pour le chunk p dans plr</span>
+0072       <span class="comment">%---------------------------------------</span>
+0073       nb_plan = min(p+nbp,V(1).dim(3)) - p + 1;
+0074       plank=length(p:min(p+nbp,V(1).dim(3))); 
+0075       dimx=V(1).dim(1);
+0076       dimy=V(1).dim(2);
+0077       
+0078       fprintf(<span class="string">'\r%-20s: '</span>,sprintf(<span class="string">'Plane %3d/%-3d '</span>,<span class="keyword">...</span>
+0079           p,V(1).dim(3)))
+0080 
+0081       
+0082       
+0083       plm     = zeros(dimx*dimy,nb_plan);
+0084       plr = zeros(dimx*dimy,nb_plan);
+0085       i_plm   = 0;
+0086     fprintf(<span class="string">'%20s'</span>,<span class="string">' Reading Mask '</span>);  
+0087     <span class="keyword">for</span> ip=p:min(p+nbp,V(1).dim(3))
+0088         i_plm        = i_plm + 1;
+0089     
+0090     fprintf(<span class="string">'%-20s'</span>,sprintf(<span class="string">'plank %3d/%-3d'</span>,<span class="keyword">...</span>
+0091         i_plm,plank))
+0092     fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,20))
+0093         Ma           = spm_matrix([0 0 ip]);
+0094         iplm         = spm_slice_vol(Vm,Ma,Vm.dim(1:2),hold);
+0095         plm(:,i_plm) = iplm(:);
+0096         iplr  = spm_slice_vol(Vr,Ma,Vr.dim(1:2),hold);
+0097         plr(:,i_plm) = iplr(:);
+0098       <span class="keyword">end</span>
+0099       plm   = plm(:) &gt; 0;
+0100       plr = plr(:);
+0101       nvox  = sum(plm); <span class="comment">% number of voxel</span>
+0102       Nvox(sub)    = Nvox(sub) + nvox;
+0103       
+0104       <span class="keyword">if</span> nvox
+0105         
+0106         
+0107         <span class="comment">% boucle sur les temps</span>
+0108         fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,20))
+0109     fprintf(<span class="string">'%20s'</span>,<span class="string">' Reading data '</span>)
+0110         Y = zeros(floor(nvox),dimt);
+0111         
+0112         <span class="keyword">for</span> t = 1:dimt
+0113           pld     = zeros(dimx*dimy,nb_plan);
+0114       i_plm   = 0;
+0115           
+0116     <span class="keyword">for</span> ip=p:min(p+nbp,V(1).dim(3))
+0117             
+0118         
+0119         
+0120         i_plm   = i_plm + 1;
+0121         
+0122         
+0123         fprintf(<span class="string">'%-20s'</span>,sprintf(<span class="string">'plank %3d/%-3d'</span>,<span class="keyword">...</span>
+0124         i_plm,plank))
+0125         fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,20))
+0126         
+0127             Ma      = spm_matrix([0 0 ip]);
+0128             ipld    = spm_slice_vol(V(t),Ma,V(t).dim(1:2),hold);
+0129             pld(:,i_plm) = ipld(:);
+0130           <span class="keyword">end</span>
+0131           
+0132           pld = pld(:);
+0133           
+0134           Y(:,t) = pld(plm);
+0135           
+0136         <span class="keyword">end</span> <span class="comment">% for t = 1:dimt</span>
+0137         
+0138     
+0139         <span class="keyword">if</span> paramsAnal.temporalFilter
+0140         <span class="comment">%fprintf('%s',sprintf('\b')*ones(1,20))</span>
+0141         fprintf(<span class="string">'%20s'</span>,<span class="string">' apply  filter '</span>);    
+0142           Y = (spm_filter(K,W*Y'))';
+0143       fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,20))
+0144       <span class="keyword">end</span>
+0145   
+0146         <span class="keyword">if</span> paramsAnal.divideByRessd
+0147         <span class="comment">%fprintf('%s',sprintf('\b')*ones(1,20))</span>
+0148         fprintf(<span class="string">'%20s'</span>,<span class="string">' divide by Ressd '</span>);
+0149           Y = Y./repmat(sqrt(plr(find(plm))),1,dimt);
+0150       fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,20))
+0151         <span class="keyword">end</span>
+0152         <span class="comment">%fprintf('%s',sprintf('\b')*ones(1,20))</span>
+0153     fprintf(<span class="string">'%20s'</span>,<span class="string">' transposing '</span>);
+0154     
+0155         YpY      = spm_atranspa(Y) + YpY;
+0156     fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,20))
+0157       <span class="keyword">end</span> <span class="comment">%if nvox</span>
+0158     
+0159     <span class="keyword">end</span> <span class="comment">% for p = 1:nbp:V(1).dim(3):</span>
+0160     
+0161   <span class="keyword">end</span> <span class="comment">% for sub=1:nbsub</span>
+0162 fprintf(<span class="string">'%s'</span>,sprintf(<span class="string">'\b'</span>)*ones(1,60))
+0163 fprintf(<span class="string">'%s\r'</span>,sprintf(<span class="string">' '</span>)*ones(1,80))
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>
