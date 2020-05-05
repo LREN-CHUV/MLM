@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mm_load_arg</title>
+  <meta name="keywords" content="mm_load_arg">
+  <meta name="description" content="definition and description of the input arguments for MLM/SVD analysis.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>mm_load_arg
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>definition and description of the input arguments for MLM/SVD analysis.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function mmArg = mm_load_arg(arg) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> definition and description of the input arguments for MLM/SVD analysis.
+ To be use with ui_arg (interactive argument setting)
+ Format mmArg=load_arg(arg)
+ arguments : 
+        typeanal     :     type of anlysis
+        nbsub         :     number of subject
+        god         :     global output directory
+        iod         :     indv output directory
+        mod         :     Model
+        neig         :     eigen name
+        Cm         :     Contrast matrix
+        Ci         :     Contrast vector
+        Pres         :     Project in the residual space
+        dvres         :     Divide by res
+================================================================================
+-  Copyright (C) 1997-2002 CEA
+-  This software and supporting documentation were developed by
+-       CEA/DSV/SHFJ/UNAF
+-       4 place du General Leclerc
+-       91401 Orsay cedex
+-       France
+================================================================================
+</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+<li><a href="mm_arg.html" class="code" title="function varargout = mm_arg(typeAnal, argfile)">mm_arg</a>	Get arguments for MLM/SVD analysis.</li>
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function mmArg=sf_mm_load_arg(mmArg,arg)</a></li>
+</ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mmArg = mm_load_arg(arg)</a>
+0002 <span class="comment">% definition and description of the input arguments for MLM/SVD analysis.</span>
+0003 <span class="comment">% To be use with ui_arg (interactive argument setting)</span>
+0004 <span class="comment">% Format mmArg=load_arg(arg)</span>
+0005 <span class="comment">% arguments :</span>
+0006 <span class="comment">%        typeanal     :     type of anlysis</span>
+0007 <span class="comment">%        nbsub         :     number of subject</span>
+0008 <span class="comment">%        god         :     global output directory</span>
+0009 <span class="comment">%        iod         :     indv output directory</span>
+0010 <span class="comment">%        mod         :     Model</span>
+0011 <span class="comment">%        neig         :     eigen name</span>
+0012 <span class="comment">%        Cm         :     Contrast matrix</span>
+0013 <span class="comment">%        Ci         :     Contrast vector</span>
+0014 <span class="comment">%        Pres         :     Project in the residual space</span>
+0015 <span class="comment">%        dvres         :     Divide by res</span>
+0016 <span class="comment">%================================================================================</span>
+0017 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0018 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0019 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0020 <span class="comment">%-       4 place du General Leclerc</span>
+0021 <span class="comment">%-       91401 Orsay cedex</span>
+0022 <span class="comment">%-       France</span>
+0023 <span class="comment">%================================================================================</span>
+0024 
+0025 
+0026     
+0027 <span class="keyword">if</span> (nargin &lt;1) arg = <span class="string">'all'</span>; <span class="keyword">end</span>
+0028 <span class="comment">%====================================================================</span>
+0029 <span class="comment">% Global title    </span>
+0030     mmArg.title     = <span class="string">'MULTIVARIATE METHODS'</span>;
+0031     list_arg={<span class="keyword">...</span>
+0032          <span class="string">'start'</span>,<span class="keyword">...</span><span class="comment">        % Start GUI</span>
+0033          <span class="string">'typeanal'</span>,<span class="keyword">...</span><span class="comment">        % Type of anlysis.</span>
+0034          <span class="string">'nbsub'</span>,<span class="keyword">...</span><span class="comment">        % Number of subject</span>
+0035          <span class="string">'god'</span>,<span class="keyword">...</span><span class="comment">        % Global output directory.</span>
+0036          <span class="string">'iod'</span>,<span class="keyword">...</span><span class="comment">        % Indv output directory</span>
+0037          <span class="string">'mod'</span>,<span class="keyword">...</span><span class="comment">        % Model</span>
+0038          <span class="string">'neig'</span>,<span class="keyword">...</span><span class="comment">        % Eigen name</span>
+0039          <span class="string">'Cm'</span>,<span class="keyword">...</span><span class="comment">        % Contrast matrix</span>
+0040          <span class="string">'Ci'</span>,<span class="keyword">...</span><span class="comment">        % Contrast vector</span>
+0041          <span class="string">'leig'</span>,<span class="keyword">...</span><span class="comment">        % Number of eigenimage</span>
+0042          <span class="string">'Pres'</span>,<span class="keyword">...</span><span class="comment">        % Project in the residual space</span>
+0043          <span class="string">'filter'</span>,<span class="keyword">...</span><span class="comment">        % Apply filter</span>
+0044          <span class="string">'GSF'</span>,<span class="keyword">...</span><span class="comment">        % Apply GSF</span>
+0045          <span class="string">'dvres'</span>,<span class="keyword">...</span><span class="comment">        % Devide by res</span>
+0046          <span class="string">'defImages'</span>,<span class="keyword">...</span><span class="comment">    % Used default images set in VY variable (SPM.mat).</span>
+0047          <span class="string">'Image'</span><span class="keyword">...</span><span class="comment">        % Images</span>
+0048     };
+0049     <span class="keyword">if</span> strcmp(arg,<span class="string">'all'</span>)
+0050         <span class="keyword">for</span> i=1:length(list_arg)
+0051             mmArg=<a href="#_sub1" class="code" title="subfunction mmArg=sf_mm_load_arg(mmArg,arg)">sf_mm_load_arg</a>(mmArg,list_arg{i});
+0052         <span class="keyword">end</span>
+0053     <span class="keyword">else</span>
+0054         mmArg=<a href="#_sub1" class="code" title="subfunction mmArg=sf_mm_load_arg(mmArg,arg)">sf_mm_load_arg</a>(mmArg,arg);
+0055     <span class="keyword">end</span>
+0056 
+0057 
+0058 <a name="_sub1" href="#_subfunctions" class="code">function mmArg=sf_mm_load_arg(mmArg,arg)</a>
+0059 <span class="keyword">switch</span> arg
+0060 <span class="comment">%====================================================================</span>
+0061 <span class="keyword">case</span> <span class="string">'start'</span>                          <span class="comment">%start GUI</span>
+0062     mmArg.start.prompt    =<span class="string">'startup ... '</span>;
+0063     mmArg.start.ProgType     =<span class="string">'choice'</span>;
+0064     mmArg.start.description = {<span class="keyword">...</span>
+0065     <span class="string">' __  __                            '</span>
+0066     <span class="string">'(  \/  )                            '</span>
+0067     <span class="string">' )    (ULTIVARIATE                        '</span>
+0068     <span class="string">'(_/\/\_)                            '</span>
+0069     <span class="string">' __  __                            '</span>
+0070     <span class="string">'(  \/  )                            '</span>
+0071     <span class="string">' )    (ETHODS                          '</span>
+0072     <span class="string">'(_/\/\_)                            '</span>
+0073     <span class="string">'_____________________________________________________________________'</span>
+0074     <span class="string">'MULTIVARIATE METHODS is a package for fMRI/PET data analysis'</span>
+0075     <span class="string">'developed by the Models and Data Analysis group at SHFJ/CEA'</span>
+0076     <span class="string">' Main Author : Ferath Kherif. Other : JB Poline '</span>
+0077     <span class="string">' This is a ALPHA VERSION '</span>
+0078      <span class="string">' Please do not distribute and redirect requests for the toolbox to'</span> 
+0079      <span class="string">' us. For bugs, remarks, additions, etc, please contact jbp at '</span>
+0080      <span class="string">' poline@shfj.cea.fr.'</span>
+0081      <span class="string">' If you are using this material for publication,'</span>  
+0082      <span class="string">' please see with us how you can acknowledge our work.'</span> 
+0083     <span class="string">''</span>
+0084     <span class="string">' '</span>
+0085     <span class="string">' WARNING : THIS SOFTWARE IS DISTRIBUTED FREE WITHOUT ANY GUARANTY !'</span>
+0086     <span class="string">'_____________________________________________________________________'</span>  
+0087     <span class="string">'This package is intented for computing and visualizing '</span>
+0088     <span class="string">'Multivariate analysis.'</span>    
+0089     <span class="string">'See the help documents for how to use it .             '</span>       
+0090     <span class="string">''</span>
+0091     <span class="string">''</span>};
+0092     mmArg.start.input.label=<span class="string">'Results|Compute'</span>;
+0093     mmArg.start.input.prompt=<span class="string">'Show  previous results  or launch new analysis'</span>;
+0094 
+0095     
+0096         
+0097 <span class="comment">%====================================================================</span>
+0098 <span class="keyword">case</span> <span class="string">'typeanal'</span>                          <span class="comment">% type of anlysis.</span>
+0099     mmArg.typeanal.prompt        = <span class="string">'start analysis ... '</span>;
+0100     mmArg.typeanal.ProgType     =<span class="string">'choice'</span>;
+0101     mmArg.typeanal.description     = {<span class="keyword">...</span>
+0102     <span class="string">' Multivariate  Methods :            '</span>  
+0103     <span class="string">' Choose SVD to perform SVD (eg PCA) analysis.             '</span>    
+0104     <span class="string">' Choose MLM for  multivariate linear models.               '</span>
+0105     <span class="string">' Further information can be found in the html help document.'</span>
+0106     <span class="string">' For more advanced disscussion see Worsley 97'</span>
+0107     <span class="string">' (Neuroimage 1997 Nov;6(4):305-19) '</span> 
+0108     <span class="string">' '</span>};
+0109     mmArg.typeanal.input.label    =<span class="string">'MLM|SVD'</span>;
+0110     mmArg.typeanal.input.prompt    =<span class="string">'type of analysis ?'</span>;
+0111     
+0112 <span class="comment">%====================================================================</span>
+0113 <span class="keyword">case</span> <span class="string">'nbsub'</span>                       <span class="comment">% number of subject</span>
+0114     
+0115     mmArg.nbsub.prompt        = <span class="string">'space domains ...'</span>;
+0116     mmArg.nbsub.ProgType        = <span class="string">'edit'</span>;
+0117     mmArg.nbsub.description        = {<span class="keyword">...</span>
+0118     <span class="string">'Choose the number of space domains (with identical time domains) for this analysis   '</span>
+0119     <span class="string">'This corresponds to the number of SPM analyses that have previously '</span>
+0120     <span class="string">'been done and that will be included in the multivariate computations '</span>
+0121     <span class="string">'(e.g. this number is 1 for fixed effect analysis - and in fact is generally 1 ...)'</span> };
+0122     mmArg.nbsub.input.etype        = <span class="string">'evaluated'</span>;
+0123     mmArg.nbsub.input.prompt    = <span class="string">'number of analyses ?'</span>;
+0124     mmArg.nbsub.input.def        = 1;
+0125 
+0126 <span class="comment">%====================================================================</span>
+0127 <span class="keyword">case</span> <span class="string">'god'</span>                    <span class="comment">% global output directory.</span>
+0128 
+0129     mmArg.god.prompt        = <span class="string">'global subjects results ...'</span>;
+0130     mmArg.god.ProgType        = <span class="string">'dir'</span>;
+0131     mmArg.god.description        = {<span class="keyword">...</span>
+0132     <span class="string">'Select a directory. Global results concerning the MM analysis   '</span>
+0133     <span class="string">'will be saved in this directory.                          '</span> 
+0134     <span class="string">'You must have write permissions on this directory'</span>};
+0135     mmArg.god.input.prompt        = <span class="string">''</span>;
+0136 
+0137 <span class="comment">%====================================================================</span>
+0138 <span class="keyword">case</span> <span class="string">'iod'</span>                       <span class="comment">% indv output directory    </span>
+0139     
+0140     mmArg.iod.prompt    = <span class="string">'individual space domain results ...'</span>;
+0141     mmArg.iod.ProgType    = <span class="string">'dir'</span>;
+0142     mmArg.iod.description    = {<span class="keyword">...</span>
+0143     <span class="string">'Select a directory. Results concerning this specific space domain '</span>
+0144     <span class="string">'will be saved in this directory                          '</span> };
+0145     mmArg.iod.input.prompt    = <span class="string">''</span>;
+0146 
+0147 <span class="comment">%====================================================================</span>
+0148 <span class="keyword">case</span> <span class="string">'mod'</span>                               <span class="comment">% Model</span>
+0149     
+0150     mmArg.mod.prompt    = <span class="string">'Model setting...'</span>;
+0151     mmArg.mod.ProgType    = <span class="string">'file'</span>;
+0152     mmArg.mod.description    = {<span class="keyword">...</span>
+0153     <span class="string">'Select a SPM.mat matrix. This will define an experimental model '</span>
+0154     <span class="string">'that will be used to either remove some components of no interest '</span>
+0155     <span class="string">'or to reduce the data to the part that correlates with part of '</span>
+0156     <span class="string">'this model (projection onto some space of interest). '</span>
+0157     };
+0158     mmArg.mod.input.prompt    = <span class="string">''</span>;
+0159     mmArg.mod.input.filter    = <span class="string">'SPM.mat'</span>;
+0160     mmArg.mod.input.nb    = <span class="string">'1'</span>;
+0161     
+0162 <span class="comment">%====================================================================</span>
+0163 <span class="keyword">case</span> <span class="string">'neig'</span>                       <span class="comment">% eigen name</span>
+0164     
+0165     mmArg.neig.prompt    = <span class="string">'EigenImage...'</span>;
+0166     mmArg.neig.ProgType    = <span class="string">'edit'</span>;
+0167     mmArg.neig.description    = {<span class="keyword">...</span>
+0168     <span class="string">'Choose the base-name for the output eigen image   '</span> 
+0169     <span class="string">'Eigenimages will be named &quot;base-name&quot;NNNN where NNNN '</span>
+0170     <span class="string">'is the eigen image number'</span> 
+0171     };
+0172     mmArg.neig.input.etype    = <span class="string">'string'</span>;
+0173     mmArg.neig.input.prompt    = <span class="string">'basename '</span>;
+0174     mmArg.neig.input.def    = <span class="string">'eigen'</span>;
+0175 <span class="comment">%====================================================================</span>
+0176 <span class="keyword">case</span> <span class="string">'Cm'</span>                         <span class="comment">% Contrast matrix</span>
+0177     
+0178     mmArg.Cm.prompt        = <span class="string">'Contrast Matrix...'</span>;
+0179     mmArg.Cm.ProgType    = <span class="string">'file'</span>;
+0180     mmArg.Cm.description    = {<span class="keyword">...</span>
+0181     <span class="string">'Select a contrast matrix that corresponds to the SPM.mat chosen :'</span>
+0182     };
+0183     mmArg.Cm.input.prompt    = <span class="string">''</span>;
+0184     mmArg.Cm.input.filter    = <span class="string">'xCon.mat'</span>;
+0185     mmArg.Cm.input.nb     = <span class="string">'1'</span>;
+0186 <span class="comment">%====================================================================</span>
+0187 <span class="keyword">case</span> <span class="string">'Ci'</span>                         <span class="comment">% Contrast vector</span>
+0188     
+0189     mmArg.Ci.prompt        = <span class="string">'Contrast ...'</span>;
+0190     mmArg.Ci.ProgType    = <span class="string">'contrast'</span>;
+0191     mmArg.Ci.description    = {<span class="keyword">...</span>
+0192     <span class="string">'Select a contrast:                                       '</span>
+0193     <span class="string">'for data projection onto a subspace (removing effect of no interest'</span>
+0194     <span class="string">'or selecting effect of interest) with the selection of an appropriate contrast '</span>
+0195     <span class="string">'(For instance, choose a contrast that selects the block effects to remove them '</span>
+0196     <span class="string">'in a further SVD analysis)'</span>
+0197     };
+0198     mmArg.Ci.input.prompt    = <span class="string">''</span>;
+0199     
+0200 
+0201 <span class="comment">%====================================================================</span>
+0202 <span class="keyword">case</span> <span class="string">'leig'</span>                    <span class="comment">% number of eigenimage</span>
+0203     
+0204     mmArg.leig.prompt    = <span class="string">'EigenImage ...'</span>;
+0205     mmArg.leig.ProgType    = <span class="string">'edit'</span>;
+0206     mmArg.leig.description    = {<span class="keyword">...</span>
+0207     <span class="string">'Choose the number of eigenimage to be saved.            '</span>
+0208     <span class="string">'You can choose a small number, 5 is generally enough to start with '</span>
+0209     <span class="string">'Type for example 1:5 to save the first 5 eigenimages '</span>
+0210     <span class="string">'You will be given later the possibillty to compute a new set of eigenimage.'</span>
+0211     };
+0212     mmArg.leig.input.etype    = <span class="string">'evaluated'</span>;
+0213     mmArg.leig.input.prompt    = <span class="string">'number of eigenImage?'</span>;
+0214     mmArg.leig.input.def    = <span class="string">'1:5'</span>;
+0215 
+0216     
+0217 <span class="comment">%====================================================================</span>
+0218 <span class="keyword">case</span> <span class="string">'Pres'</span>                   <span class="comment">% Project in the residual space</span>
+0219     
+0220     mmArg.Pres.prompt    = <span class="string">'residual space ...'</span>;
+0221     mmArg.Pres.ProgType    = <span class="string">'choice'</span>;
+0222     mmArg.Pres.description    = {<span class="keyword">...</span>
+0223     <span class="string">'Choose yes if you want to perform the analysis     '</span>
+0224     <span class="string">'in the residual space. This means that the part of the data that correlates '</span>
+0225     <span class="string">'with    X*c     where c is your contrast (possibly multidimensional) and '</span>
+0226     <span class="string">'X is the design matrix will be removed.'</span>
+0227     <span class="string">'                                                   '</span>};
+0228     mmArg.Pres.input.label    = <span class="string">'Yes|No'</span>;
+0229     mmArg.Pres.input.values    = [1 0];
+0230     mmArg.Pres.input.prompt    = <span class="string">'Project in residual space'</span>;
+0231     
+0232     
+0233 <span class="comment">%====================================================================</span>
+0234 <span class="keyword">case</span> <span class="string">'filter'</span>                            <span class="comment">% Apply filter    </span>
+0235     
+0236     mmArg.filter.prompt    = <span class="string">'Apply filter ...'</span>;
+0237     mmArg.filter.ProgType    = <span class="string">'choice'</span>;
+0238     mmArg.filter.description= {<span class="keyword">...</span>
+0239     <span class="string">'Choose yes if you want to filter the data by the temporal '</span>
+0240     <span class="string">'filter that was used in the initial SPM analysis. In general '</span>
+0241     <span class="string">'this is adviced unless you know exatly what you''re doing because'</span>
+0242     <span class="string">'the model used to project the data onto a subspace has also been'</span>
+0243     <span class="string">'temporally filtered'</span>
+0244     <span class="string">'                                                   '</span>};
+0245     mmArg.filter.input.label    = <span class="string">'Yes|No'</span>;
+0246     mmArg.filter.input.values    = [1 0];
+0247     mmArg.filter.input.prompt    = <span class="string">'Filter ?'</span>;
+0248 
+0249 
+0250 <span class="comment">%====================================================================</span>
+0251 <span class="keyword">case</span> <span class="string">'GSF'</span>                            <span class="comment">% Apply GSF    </span>
+0252     
+0253     mmArg.GSF.prompt    = <span class="string">'Use gSF ...'</span>;
+0254     mmArg.GSF.ProgType    = <span class="string">'choice'</span>;
+0255     mmArg.GSF.description= {<span class="keyword">...</span>
+0256     <span class="string">'Choose yes if you want to use gSF the data  '</span>
+0257     <span class="string">' '</span>
+0258     <span class="string">''</span>
+0259     <span class="string">''</span>
+0260     <span class="string">''</span>
+0261     <span class="string">'                                                   '</span>};
+0262     mmArg.GSF.input.label    = <span class="string">'Yes|No'</span>;
+0263     mmArg.GSF.input.values    = [1 0];
+0264     mmArg.GSF.input.prompt    = <span class="string">' Use gSF?'</span>;
+0265     
+0266 <span class="comment">%====================================================================</span>
+0267 <span class="keyword">case</span> <span class="string">'dvres'</span>                           <span class="comment">% Devide by res    </span>
+0268     
+0269     mmArg.dvres.prompt    = <span class="string">'normalize by residuals SD ...'</span>;
+0270     mmArg.dvres.ProgType    = <span class="string">'choice'</span>;
+0271     mmArg.dvres.description    = {<span class="keyword">...</span>
+0272     <span class="string">'choose yes if you want to normalize the data     '</span>
+0273     <span class="string">'voxel per voxel by the estimate of the residual standard deviation'</span>
+0274     <span class="string">'                                                   '</span>};
+0275     mmArg.dvres.input.label    = <span class="string">'Yes|No'</span>;
+0276     mmArg.dvres.input.values=[1 0];
+0277     mmArg.dvres.input.prompt=<span class="string">'normalize ?'</span>;
+0278 <span class="comment">%====================================================================</span>
+0279 <span class="keyword">case</span> <span class="string">'DefImages'</span>                           <span class="comment">% default images    </span>
+0280     
+0281     mmArg.DefImages.prompt    = <span class="string">'Data Image: Use default location ?'</span>;
+0282     mmArg.DefImages.ProgType    = <span class="string">'choice'</span>;
+0283     mmArg.DefImages.description    = {<span class="keyword">...</span>
+0284     <span class="string">'Default : use images defined by SPM analysis (stored in the SPM.mat file).'</span>
+0285     <span class="string">'Choose manually: to enter manually the location of images. '</span>
+0286     <span class="string">''</span>};
+0287     mmArg.DefImages.input.label    = <span class="string">'Use default|Choose manually'</span>;
+0288     mmArg.DefImages.input.values=[1 0];
+0289     mmArg.DefImages.input.prompt=<span class="string">''</span>;
+0290     
+0291 <span class="comment">%====================================================================</span>
+0292 <span class="keyword">case</span> <span class="string">'Image'</span>                         <span class="comment">% Contrast matrix</span>
+0293     
+0294     mmArg.Image.prompt    = <span class="string">'Data Image...'</span>;
+0295     mmArg.Image.ProgType    = <span class="string">'file'</span>;
+0296     mmArg.Image.description    = {<span class="keyword">...</span>
+0297     <span class="string">'choose the functional images to work on:'</span>
+0298     <span class="string">'                                  '</span> };
+0299     mmArg.Image.input.prompt= <span class="string">''</span>;
+0300     mmArg.Image.input.filter= <span class="string">'img'</span>;
+0301     
+0302 
+0303 <span class="comment">%====================================================================</span>
+0304 <span class="keyword">otherwise</span>
+0305     
+0306     fprintf(<span class="string">'\n typeanal :     type of anlysis           '</span>);
+0307     fprintf(<span class="string">'\n nbsub    :     number of subject           '</span>);
+0308     fprintf(<span class="string">'\n god      :     global output directory       '</span>);
+0309     fprintf(<span class="string">'\n iod      :     indv output directory       '</span>);
+0310     fprintf(<span class="string">'\n mod      :     Model               '</span>);
+0311     fprintf(<span class="string">'\n neig     :     eigen name               '</span>);
+0312     fprintf(<span class="string">'\n Cm       :     Contrast matrix           '</span>);
+0313     fprintf(<span class="string">'\n Ci       :     Contrast vector           '</span>);
+0314     fprintf(<span class="string">'\n Pres     :     Project in the residual space  '</span>);
+0315     fprintf(<span class="string">'\n dvres    :     Divide by res                  '</span>);
+0316     
+0317     
+0318 end        
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

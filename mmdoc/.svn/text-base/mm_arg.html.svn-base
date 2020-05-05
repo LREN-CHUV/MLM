@@ -1,0 +1,443 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mm_arg</title>
+  <meta name="keywords" content="mm_arg">
+  <meta name="description" content="Get arguments for MLM/SVD analysis.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>mm_arg
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Get arguments for MLM/SVD analysis.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = mm_arg(typeAnal, argfile) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Get arguments for MLM/SVD analysis.
+ Format varargout = mm_arg(typeAnal, argfile)
+ nbsub        = Number of subject or space domain.
+ Pimg        = Beta images for MLM, Data images for SVD.
+ Res        = estimated residual variance image.
+ Mask         = analysis mask image indicating which voxels were
+         included in the analysis
+ gcsd        = global result directory.
+ cwd        = current working directory (dir contening the model)
+ csd         = current saving directory for each space domain.
+ fname     = Eigen image basename.
+ Xc        = Contrast 
+ gsf        = global scaling factor.
+ Filter     = Sparse temporal smoothing matrix.
+ leig        = Eigen Images to save.
+ paramsAnal    = Parameters for the anlysis :
+================================================================================
+-  Copyright (C) 1997-2002 CEA
+-  This software and supporting documentation were developed by
+-       CEA/DSV/SHFJ/UNAF
+-       4 place du General Leclerc
+-       91401 Orsay cedex
+-       France
+================================================================================
+</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>	definition and description of the input arguments for MLM/SVD analysis.</li>
+<li><a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>	Argument manager interface</li>
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [nbsub, Pimg, Res, Mask, Yimg ,gcsd, cwd, csd, xC, fname, gsf, Filter, leig, paramsAnal,W] =</a></li>
+<li><a href="#_sub2" class="code">function [nbsub, Pimg, Res, Mask, gcsd, cwd, csd, xC, Filter, paramsAnal, fname, leig, gsf] =</a></li>
+<li><a href="#_sub3" class="code">function [res,n]=sf_strsplit(str,fs)</a></li>
+</ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = mm_arg(typeAnal, argfile)</a>
+0002 <span class="comment">% Get arguments for MLM/SVD analysis.</span>
+0003 <span class="comment">% Format varargout = mm_arg(typeAnal, argfile)</span>
+0004 <span class="comment">% nbsub        = Number of subject or space domain.</span>
+0005 <span class="comment">% Pimg        = Beta images for MLM, Data images for SVD.</span>
+0006 <span class="comment">% Res        = estimated residual variance image.</span>
+0007 <span class="comment">% Mask         = analysis mask image indicating which voxels were</span>
+0008 <span class="comment">%         included in the analysis</span>
+0009 <span class="comment">% gcsd        = global result directory.</span>
+0010 <span class="comment">% cwd        = current working directory (dir contening the model)</span>
+0011 <span class="comment">% csd         = current saving directory for each space domain.</span>
+0012 <span class="comment">% fname     = Eigen image basename.</span>
+0013 <span class="comment">% Xc        = Contrast</span>
+0014 <span class="comment">% gsf        = global scaling factor.</span>
+0015 <span class="comment">% Filter     = Sparse temporal smoothing matrix.</span>
+0016 <span class="comment">% leig        = Eigen Images to save.</span>
+0017 <span class="comment">% paramsAnal    = Parameters for the anlysis :</span>
+0018 <span class="comment">%================================================================================</span>
+0019 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0020 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0021 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0022 <span class="comment">%-       4 place du General Leclerc</span>
+0023 <span class="comment">%-       91401 Orsay cedex</span>
+0024 <span class="comment">%-       France</span>
+0025 <span class="comment">%================================================================================</span>
+0026 
+0027 
+0028 
+0029 
+0030 
+0031 <span class="keyword">switch</span> typeAnal
+0032     <span class="keyword">case</span> <span class="string">'MLM'</span>
+0033         [nbsub, Pimg, Res, Mask, Yimg, gcsd, cwd, csd, xC, fname, gsf, Filter, leig, paramsAnal,W] = <span class="keyword">...</span>
+0034                                         sf_arg_mlm(argfile);
+0035         varargout     = {nbsub, Pimg, Res, Mask, Yimg,gcsd, cwd, csd, xC, fname, gsf, Filter, <span class="keyword">...</span>
+0036                                         leig, paramsAnal,W};
+0037     <span class="keyword">case</span> <span class="string">'SVD'</span>
+0038         [nbsub, Pimg, Res, Mask, gcsd, cwd, csd, xC, Filter, paramsAnal, fname, leig, gsf] = <span class="keyword">...</span>
+0039                                          sf_arg_svd(argfile);
+0040         varargout     = {nbsub, Pimg, Res, Mask, gcsd, cwd, csd, xC, Filter, paramsAnal, <span class="keyword">...</span>
+0041                                         fname, leig, gsf};
+0042     <span class="keyword">otherwise</span>
+0043         error(<span class="string">'unknown type of analysis'</span>)
+0044 <span class="keyword">end</span>
+0045 
+0046 
+0047 <span class="comment">%=========================================================================================================</span>
+0048 <a name="_sub1" href="#_subfunctions" class="code">function [nbsub, Pimg, Res, Mask, Yimg ,gcsd, cwd, csd, xC, fname, gsf, Filter, leig, paramsAnal,W] = </a><span class="keyword">...</span>
+0049                                         sf_arg_mlm(argfile)
+0050 
+0051 <span class="comment">%-     if the argfile is not given then the interactive mode is use.</span>
+0052 <span class="comment">% argfile format is : one line per subject whith 3 variables cwd, csd and d delimited by a semicolon &quot;;&quot;.</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% input argument for the multivariate analysis.</span>
+0055 <span class="comment">% FORMAT [nbsub, Pimg, Res,Mask] = mm_arg(argfile)</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% nbsub         : number of subject</span>
+0058 <span class="comment">% Pimg             : images filename, input data for the mlm computation</span>
+0059 <span class="comment">% cwd, csd        : SPM.mat directory, directory for saving results.</span>
+0060 <span class="comment">% argfile         : parameter file</span>
+0061 <span class="comment">% cwd, csd         : working and saving directory.</span>
+0062 <span class="comment">% Xc             : contrast.</span>
+0063 <span class="comment">% paramsAnal        : on what is the eigen value decomposition done :</span>
+0064 <span class="comment">%               - divideByRessd = 1 : divide by the residual standard deviation</span>
+0065 <span class="comment">%               - temporalFilter = 1 : apply the temporal filter to data first</span>
+0066 <span class="comment">% fname            : generic name for the eigen images</span>
+0067 <span class="comment">% leig            : liste of number for which the corresponding eigenimages will be constructed</span>
+0068 <span class="comment">%=========================================================================================================</span>
+0069 
+0070 <span class="keyword">if</span> isempty(argfile) <span class="comment">%- INTERACTIVE MODE</span>
+0071    
+0072    <span class="comment">%- Set the number of subjects and gcsd</span>
+0073    <span class="comment">%--------------------------------------------------------------------</span>
+0074 
+0075       
+0076       gcsd    = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'god'</span>),<span class="string">'god'</span>);
+0077       nbsub    = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'nbsub'</span>),<span class="string">'nbsub'</span>);
+0078       
+0079 
+0080    <span class="comment">%- Set working directory for each subject and names for eigenimages</span>
+0081    <span class="comment">%--------------------------------------------------------------------</span>
+0082 
+0083          <span class="keyword">for</span> sub=1:nbsub
+0084              input     = sprintf(<span class="string">'for space domain %d '</span>,sub);
+0085           arg       = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'mod'</span>);
+0086           arg.mod.input.prompt = [<span class="string">'model  '</span>input];
+0087           cwd{sub}     = spm_str_manip(<a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'mod'</span>),<span class="string">'H'</span>);
+0088           <span class="keyword">if</span> nbsub &gt; 1
+0089              arg        = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'iod'</span>);
+0090          arg.iod.input.prompt = [<span class="string">'dir '</span>input];
+0091                 csd{sub}     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'iod'</span>);
+0092           <span class="keyword">else</span>
+0093              csd{1}        = gcsd;
+0094           <span class="keyword">end</span>
+0095           arg     = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'neig'</span>);arg.neig.input.prompt=[arg.neig.input.prompt input];
+0096              fname{sub} = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'neig'</span>);
+0097           arg = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'DefImages'</span>);arg.DefImages.input.prompt=[<span class="string">'Images '</span> input];
+0098        defImg=<a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'DefImages'</span>);
+0099           <span class="keyword">if</span> defImg
+0100               load(fullfile(cwd{sub},<span class="string">'SPM.mat'</span>));
+0101               Yimg{sub}=char(SPM.xY.VY.fname);
+0102           <span class="keyword">else</span>
+0103               arg=<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'Image'</span>);
+0104               arg.image.input.prompt=[<span class="string">'Images '</span> input] ;
+0105               Yimg{sub}     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'Image'</span>);
+0106           <span class="keyword">end</span>
+0107          <span class="keyword">end</span>
+0108          
+0109       <span class="comment">% csd = cwd; %- by default working and saving directory are the same.</span>
+0110   
+0111    <span class="comment">%- Load the design Matrix, (same for all subjects) and the temporal filter</span>
+0112    <span class="comment">%--------------------------------------------------------------------</span>
+0113   
+0114         Pmat = fullfile(cwd{1},<span class="string">'SPM.mat'</span>);
+0115       load(Pmat);
+0116       xX=SPM.xX
+0117           Filter    = SPM.xX.K;
+0118       W        =SPM.xX.W;
+0119    
+0120    <span class="comment">%- Load the contrast</span>
+0121    <span class="comment">%--------------------------------------------------------------------</span>
+0122 
+0123          <span class="comment">%Pcon             = ui_arg(mm_load_arg('Cm'),'Cm');    %- get name of xCon matrix</span>
+0124          <span class="comment">%load(Pcon,'xCon');</span>
+0125       arg             = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'Ci'</span>); <span class="comment">%- Ci : a specific contrast</span>
+0126       arg.Ci.input.xX   = xX; 
+0127       arg.Ci.input.xCon = SPM.xCon; 
+0128          arg             = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'Ci'</span>);
+0129       [Ic,xCon]        = deal(arg{:});
+0130          xC             = xCon(Ic);
+0131       <span class="comment">%try, save(Pcon,'xCon'); catch, fprintf('can not save xCon : check permissions\n'); end;</span>
+0132       clear arg;
+0133 
+0134 <span class="keyword">else</span>   <span class="comment">%- BATCH MODE</span>
+0135        [ggcsd cwd csd d fname]     = textread(argfile,<span class="string">'%s %s %s %d %s'</span>,<span class="string">'commentstyle'</span>,<span class="string">'matlab'</span>);
+0136       gcsd=ggcsd{1};
+0137        nbsub        = size(cwd,1);
+0138        load(fullfile(cwd{1},<span class="string">'xCon.mat'</span>),<span class="string">'xCon'</span>);
+0139       load(fullfile(cwd{1},<span class="string">'SPM.mat'</span>),<span class="string">'xX'</span>);
+0140       Filter=xX.K;
+0141       d = d(1,1);
+0142       <span class="keyword">if</span> isempty(d), d=1; <span class="keyword">end</span>
+0143         xC     = xCon(d);
+0144       <span class="comment">%------ SOME DEFAULTS VALES - TO BE PUT IN A DEFAULT FILE ?</span>
+0145       leig     = 1:5;            <span class="comment">% defaults that should</span>
+0146 <span class="keyword">end</span>
+0147 
+0148 <span class="comment">%- Set parameters : filtering and divide by std deviation</span>
+0149 <span class="comment">%--------------------------------------------------------------------</span>
+0150   paramsAnal.divideByRessd     = 1;
+0151   paramsAnal.temporalFilter     = 1;
+0152   paramsAnal.resContSp        = 0;
+0153 
+0154 <span class="comment">%- set the parameters: Pimg, Res and Mask filenames.</span>
+0155 <span class="comment">%--------------------------------------------------------------------</span>
+0156 
+0157 <span class="keyword">for</span> sub = 1:nbsub
+0158        load(fullfile(cwd{sub},<span class="string">'SPM.mat'</span>));
+0159        Vbeta=SPM.Vbeta;
+0160        Pimg{sub}    = [repmat([cwd{sub}, filesep],length(Vbeta),1),char(Vbeta.fname)];
+0161        Mask{sub}    = fullfile(cwd{sub}, <span class="string">'mask.img'</span>);
+0162        VResMS =SPM.VResMS
+0163        Res{sub}        = fullfile(cwd{sub},char(VResMS.fname));
+0164        gsf{sub}        = SPM.xGX.gSF;
+0165      
+0166 <span class="keyword">end</span>
+0167 
+0168 
+0169 <span class="keyword">if</span> isempty(argfile)    <span class="comment">%- NOT IN BATCH MODE</span>
+0170    <span class="comment">%- Set number of eigenimages</span>
+0171    <span class="comment">%--------------------------------------------------------------------</span>
+0172    arg        = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'leig'</span>);
+0173    arg.leig.input.def=[<span class="string">'[1:'</span> num2str(min(5,size(Pimg{1},1))) <span class="string">']'</span>];
+0174    leig     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'leig'</span>);
+0175 
+0176 <span class="keyword">end</span>
+0177 
+0178 
+0179 clear Vbeta,VResMS;
+0180 
+0181 
+0182 <span class="comment">%=========================================================================================================</span>
+0183 <a name="_sub2" href="#_subfunctions" class="code">function [nbsub, Pimg, Res, Mask, gcsd, cwd, csd, xC, Filter, paramsAnal, fname, leig, gsf] = </a><span class="keyword">...</span>
+0184                                     sf_arg_svd(argfile);
+0185 <span class="comment">%</span>
+0186 <span class="comment">% paramsAnal        : on what is the eigen value decomposition done :</span>
+0187 <span class="comment">%               - divideByRessd = 1 : divide by the residual standard deviation</span>
+0188 <span class="comment">%               - temporalFilter = 1 : apply the temporal filter to data first</span>
+0189 <span class="comment">% fname            : generic name for the eigen images</span>
+0190 <span class="comment">% leig            : liste of number for which the corresponding</span>
+0191 <span class="comment">%              eigenimages will be constructed</span>
+0192 <span class="comment">%</span>
+0193 <span class="comment">%=========================================================================================================</span>
+0194 
+0195 paramsAnal = struct(<span class="keyword">...</span>
+0196         <span class="string">'divideByRessd'</span>, 1, <span class="keyword">...</span>
+0197         <span class="string">'temporalFilter'</span>, 1, <span class="keyword">...</span>
+0198         <span class="string">'resContSp'</span>, 0 <span class="keyword">...</span>
+0199         );
+0200 
+0201 <span class="keyword">if</span> isempty(argfile) <span class="comment">%- INTERACTIVE MODE</span>
+0202     
+0203    <span class="comment">%- Set the number of subjects and gcsd</span>
+0204    <span class="comment">%--------------------------------------------------------------------</span>
+0205 
+0206    gcsd        = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'god'</span>),<span class="string">'god'</span>);
+0207    nbsub    = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'nbsub'</span>),<span class="string">'nbsub'</span>);
+0208       
+0209    <span class="comment">%- Set input and output directories and names for eigenimages - get gsf</span>
+0210    <span class="comment">%--------------------------------------------------------------------</span>
+0211    <span class="keyword">for</span> sub=1:nbsub
+0212        input=sprintf(<span class="string">'for space domain %d '</span>,sub);
+0213        arg=<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'mod'</span>);
+0214        arg.mod.input.prompt=[<span class="string">'model  '</span>input];  
+0215        cwd{sub}     = spm_str_manip(<a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'mod'</span>),<span class="string">'H'</span>);
+0216        
+0217        <span class="keyword">if</span> nbsub &gt; 1
+0218           arg=<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'iod'</span>);arg.iod.input.prompt = [<span class="string">'result directory  '</span>input];                   
+0219           csd{sub}     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'iod'</span>);
+0220        <span class="keyword">else</span>
+0221       csd{1}    = gcsd;
+0222        <span class="keyword">end</span>
+0223        arg = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'DefImages'</span>);arg.DefImages.input.prompt=[<span class="string">'Images '</span> input];
+0224        defImg=<a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'DefImages'</span>);
+0225        <span class="keyword">if</span> defImg
+0226         load(fullfile(cwd{sub},<span class="string">'SPM.mat'</span>),<span class="string">'VY'</span>);
+0227         Pimg{sub}=char(VY.fname);
+0228     <span class="keyword">else</span>
+0229         arg=<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'Image'</span>);
+0230         arg.image.input.prompt=[<span class="string">'Images '</span> input];
+0231 
+0232            Pimg{sub}     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'Image'</span>);
+0233        <span class="keyword">end</span>
+0234        arg = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'neig'</span>); arg.neig.input.prompt=[arg.neig.input.prompt input];
+0235        fname{sub}             = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'neig'</span>);
+0236        
+0237        load(fullfile(cwd{sub},<span class="string">'SPMcfg.mat'</span>), <span class="string">'xGX'</span>);
+0238        gsf{sub}                = xGX.gSF;
+0239        
+0240    <span class="keyword">end</span>
+0241 
+0242    <span class="comment">%- Load design matrix of the first subject</span>
+0243    <span class="comment">%--------------------------------------------------------------------</span>
+0244    
+0245    load(fullfile(cwd{1},<span class="string">'SPM.mat'</span>),<span class="string">'xX'</span>);
+0246    Filter    = xX.K;    
+0247    
+0248    <span class="comment">%- Load the contrast</span>
+0249    <span class="comment">%--------------------------------------------------------------------</span>
+0250 
+0251    Pcon         = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'Cm'</span>),<span class="string">'Cm'</span>);
+0252    load(Pcon,<span class="string">'xCon'</span>);
+0253    arg=<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'Ci'</span>);
+0254    arg.Ci.input.xX=xX; clear xX;
+0255    arg.Ci.input.xCon=xCon; clear xCon;
+0256    arg     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'Ci'</span>);
+0257    [Ic,xCon]     = deal(arg{:});
+0258    xC         = xCon(Ic);
+0259    save(Pcon,<span class="string">'xCon'</span>);
+0260    
+0261    
+0262    clear arg xCon
+0263 
+0264 
+0265    <span class="comment">%- Get images + Mask + ResMS per subject</span>
+0266    <span class="comment">%--------------------------------------------------------------------</span>
+0267    <span class="keyword">for</span> sub=1:nbsub
+0268 
+0269        Mask{sub}       = fullfile(cwd{sub},<span class="string">'mask.img'</span>);
+0270        load(fullfile(cwd{sub},<span class="string">'SPM.mat'</span>),<span class="string">'VResMS'</span>);
+0271        Res{sub}    = fullfile(cwd{sub},char(VResMS));
+0272    <span class="keyword">end</span>
+0273 
+0274    <span class="comment">%- Set number of eigenimages</span>
+0275    <span class="comment">%--------------------------------------------------------------------</span>
+0276    arg        = <a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'leig'</span>);
+0277    arg.leig.input.def=[<span class="string">'[1:'</span> num2str(min(5,size(Pimg{1},1))) <span class="string">']'</span>];
+0278    leig     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(arg,<span class="string">'leig'</span>);
+0279 
+0280    <span class="comment">%- Set parameters : filtering and divide by std deviation</span>
+0281    <span class="comment">%--------------------------------------------------------------------</span>
+0282    paramsAnal.resContSp     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'Pres'</span>),<span class="string">'Pres'</span>);
+0283    paramsAnal.divideByRessd     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'dvres'</span>),<span class="string">'dvres'</span>);
+0284  
+0285    paramsAnal.temporalFilter     = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'filter'</span>),<span class="string">'filter'</span>);
+0286 
+0287 
+0288 <span class="keyword">else</span>   <span class="comment">%- BATCH MODE</span>
+0289        [gcsdr cwd csd d fname ImgDir ImgName paramsAnal.temporalFilter paramsAnal.divideByRessd paramsAnal.resContSp ] <span class="keyword">...</span>
+0290           = textread(argfile,<span class="string">'%s %s %s %d %s %s %s %d %d %d'</span>,<span class="string">'commentstyle'</span>,<span class="string">'matlab'</span>);
+0291       
+0292        nbsub        = size(cwd,1);
+0293       gcsd=gcsdr{1}
+0294       load(fullfile(cwd{1},<span class="string">'SPM.mat'</span>),<span class="string">'xX'</span>);
+0295       Filter    = xX.K;
+0296        load(fullfile(cwd{1},<span class="string">'xCon.mat'</span>),<span class="string">'xCon'</span>);
+0297       d = d(1,1);
+0298       <span class="keyword">if</span> isempty(d), d=1; <span class="keyword">end</span>
+0299         xC     = xCon(d);
+0300       
+0301      clear xX xCon
+0302      <span class="keyword">for</span> sub=1:nbsub
+0303           [DIn Dsz]    =<a href="#_sub3" class="code" title="subfunction [res,n]=sf_strsplit(str,fs)">sf_strsplit</a>(ImgName{sub},<span class="string">';'</span>);
+0304               <span class="keyword">for</span> i=1:Dsz
+0305                   pimg{i}=spm_get(<span class="string">'Files'</span>,ImgDir{sub},str_clean(DIn{i}));
+0306               <span class="keyword">end</span>
+0307              Pimg{sub}     = cat(1,pimg{:});
+0308              Mask{sub}       = fullfile(cwd{sub},<span class="string">'mask.img'</span>);
+0309              load(fullfile(cwd{sub},<span class="string">'SPM.mat'</span>),<span class="string">'VResMS'</span>);
+0310              Res{sub}    = fullfile(cwd{sub},char(VResMS));
+0311           load(fullfile(cwd{sub},<span class="string">'SPMcfg.mat'</span>), <span class="string">'xGX'</span>);
+0312                  gsf{sub}        = xGX.gSF;
+0313           clear xGX;
+0314      <span class="keyword">end</span>
+0315       leig     = 1:5;    
+0316 <span class="keyword">end</span>
+0317 
+0318 
+0319 
+0320 <a name="_sub3" href="#_subfunctions" class="code">function [res,n]=sf_strsplit(str,fs)</a>
+0321 
+0322 <span class="comment">%- Split the string str into cell array elements a{1}, a{2},</span>
+0323 <span class="comment">%- a{n},  and  return n. The separation will be</span>
+0324 <span class="comment">%- done with the expression  fs</span>
+0325 <span class="comment">%-</span>
+0326 
+0327 
+0328 <span class="keyword">if</span> length(fs) &gt;1 
+0329     disp(<span class="string">'error'</span>)
+0330     <span class="keyword">return</span>;
+0331 <span class="keyword">end</span>
+0332 
+0333 id=find(str==fs);
+0334 <span class="keyword">if</span> isempty(id)
+0335     n=1;
+0336     res{n}=str;
+0337     <span class="keyword">return</span>
+0338 <span class="keyword">end</span>
+0339 sz=length(str);
+0340 cur=1;
+0341 n=1;
+0342 <span class="keyword">for</span> i=1:length(id)
+0343     
+0344     tmp=str(cur:id(i)-1);
+0345     <span class="keyword">if</span> length(tmp)
+0346        res{n}=str(cur:id(i)-1);
+0347        n=n+1;
+0348     <span class="keyword">end</span>
+0349     cur=id(i)+1;
+0350     
+0351     <span class="keyword">if</span> (id(i)==sz)
+0352         <span class="keyword">break</span>;
+0353     <span class="keyword">end</span>
+0354 
+0355 
+0356 <span class="keyword">end</span>
+0357 
+0358 <span class="keyword">if</span> id(length(id))&lt;sz
+0359     res{n}=str(id(length(id))+1:sz);
+0360 
+0361 <span class="keyword">else</span> n=n-1;
+0362 <span class="keyword">end</span>
+0363 
+0364 
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

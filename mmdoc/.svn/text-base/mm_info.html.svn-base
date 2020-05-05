@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mm_info</title>
+  <meta name="keywords" content="mm_info">
+  <meta name="description" content="Display information about Multivariate anlysis results.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>mm_info
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Display information about Multivariate anlysis results.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function mm_info(mw) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Display information about Multivariate anlysis results.
+================================================================================
+-  Copyright (C) 1997-2002 CEA
+-  This software and supporting documentation were developed by
+-       CEA/DSV/SHFJ/UNAF
+-       4 place du General Leclerc
+-       91401 Orsay cedex
+-       France
+================================================================================
+</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [res,n]=sf_strsplit(str,fs)</a></li>
+</ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mm_info(mw)</a>
+0002 <span class="comment">% Display information about Multivariate anlysis results.</span>
+0003 <span class="comment">%================================================================================</span>
+0004 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0005 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0006 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0007 <span class="comment">%-       4 place du General Leclerc</span>
+0008 <span class="comment">%-       91401 Orsay cedex</span>
+0009 <span class="comment">%-       France</span>
+0010 <span class="comment">%================================================================================</span>
+0011 
+0012 mw=get(mw,<span class="string">'UserData'</span>);
+0013 
+0014 flag=mw.flag;
+0015     <span class="keyword">if</span> mw.flag==0
+0016     <span class="keyword">return</span>;
+0017 <span class="keyword">end</span>
+0018 tmp=mw.wedit_sub;
+0019     str_cur=get(tmp,<span class="string">'string'</span>);
+0020     eval(<span class="string">'cursp=str2double(str_cur);'</span>,<span class="string">'ok=1;'</span>);
+0021     
+0022     <span class="keyword">if</span> isnan(cursp)|(cursp&gt;length(mw.MDS.Pmat))
+0023         cursp=1;
+0024         
+0025     <span class="keyword">end</span>
+0026 set(tmp,<span class="string">'string'</span>,num2str(cursp));
+0027 
+0028 <span class="comment">%Launch Graphic Window</span>
+0029 
+0030 Fgraph = spm_figure(<span class="string">'GetWin'</span>,<span class="string">'Graphics'</span>);
+0031 set(Fgraph,<span class="string">'name'</span>,<span class="string">'Multivariate Methods: Graphics'</span>);
+0032 spm_figure(<span class="string">'Clear'</span>,Fgraph)
+0033 FS    = spm(<span class="string">'FontSizes'</span>);
+0034 PF        = spm_platform(<span class="string">'fonts'</span>);
+0035 
+0036 <span class="comment">% Get the multivariate data for the main window</span>
+0037 xC=mw.MDS.xC;
+0038 sub=cursp; <span class="comment">% subject id</span>
+0039 Rep=[<span class="string">'NO '</span>;<span class="string">'Yes'</span>];
+0040 <span class="comment">%load the Design Matrix used for the data</span>
+0041 Param=mw.MDS.paramsAnal;
+0042 load(mw.MDS.Pmat{sub});
+0043 xX=SPM.xX;
+0044 
+0045 
+0046 
+0047 
+0048 
+0049 
+0050 <span class="comment">%-Print comparison title</span>
+0051 <span class="comment">%-----------------------------------------------------------------------</span>
+0052 hTitAx = axes(<span class="string">'Parent'</span>,Fgraph,<span class="keyword">...</span>
+0053         <span class="string">'Position'</span>,[0.02 0.95 0.96 0.02],<span class="keyword">...</span>
+0054         <span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0055 
+0056 text(0.5,0,xC.name,<span class="string">'Parent'</span>,hTitAx,<span class="keyword">...</span>
+0057     <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="keyword">...</span>
+0058     <span class="string">'VerticalAlignment'</span>,<span class="string">'baseline'</span>,<span class="keyword">...</span>
+0059     <span class="string">'FontWeight'</span>,<span class="string">'Bold'</span>,<span class="string">'FontSize'</span>,FS(14))
+0060 
+0061 cwd=strrep(spm_str_manip(mw.cwd,<span class="string">'a30'</span>),<span class="string">'\'</span>,<span class="string">'\\'</span>);
+0062 UpInfo=sprintf(<span class="string">'{\\fontsize{14}\\bf} Results {\\fontsize{12}\\rm}%s'</span>,cwd);
+0063 UpInfo=sprintf(<span class="string">'%s\n\n {\\fontsize{14}\\bf}Parameters \\rm'</span>,UpInfo);
+0064 UpInfo=sprintf(<span class="string">'%s\n {\\fontsize{12}\\bf} Divide by Res std          : \\rm %s '</span>,<span class="keyword">...</span>
+0065         UpInfo,Rep(Param.divideByRessd+1,:));
+0066 UpInfo=sprintf(<span class="string">'%s\n {\\fontsize{12}\\bf} Temporaly Filter           : \\rm %s '</span>,<span class="keyword">...</span>
+0067         UpInfo,Rep(Param.temporalFilter+1,:));
+0068 UpInfo=sprintf(<span class="string">'%s\n {\\fontsize{12}\\bf} Projected to Res space  : \\rm %s '</span>,<span class="keyword">...</span>
+0069         UpInfo,Rep(Param.resContSp+1,:));
+0070 
+0071 Up=<a href="#_sub1" class="code" title="subfunction [res,n]=sf_strsplit(str,fs)">sf_strsplit</a>(UpInfo,sprintf(<span class="string">'\n'</span>));
+0072 
+0073 <span class="comment">%-Print MM results: Results directory &amp; Paramaters of the analysis</span>
+0074 <span class="comment">%-----------------------------------------------------------------------</span>
+0075 hResAx = axes(<span class="string">'Parent'</span>,Fgraph,<span class="keyword">...</span>
+0076         <span class="string">'Position'</span>,[0.02 0.85 0.45 0.05],<span class="keyword">...</span>
+0077         <span class="string">'DefaultTextVerticalAlignment'</span>,<span class="string">'baseline'</span>,<span class="keyword">...</span>
+0078         <span class="string">'DefaultTextFontSize'</span>,FS(9),<span class="keyword">...</span>
+0079         <span class="string">'DefaultTextColor'</span>,[1,1,1]*.7,<span class="keyword">...</span>
+0080         <span class="string">'Units'</span>,<span class="string">'points'</span>,<span class="keyword">...</span>
+0081         <span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0082 AxPos = get(hResAx,<span class="string">'Position'</span>); set(hResAx,<span class="string">'YLim'</span>,[0,AxPos(4)])
+0083 h = text(0,24,Up,<span class="string">'Parent'</span>,hResAx,<span class="keyword">...</span>
+0084     <span class="string">'FontWeight'</span>,<span class="string">'Bold'</span>,<span class="string">'FontSize'</span>,FS(12),<span class="string">'interpreter'</span>,<span class="string">'tex'</span>);
+0085 
+0086 
+0087 <span class="comment">%tt=text(get(h,'Extent')*[0;0;1;0],24,spm_str_manip(mw.cwd,'a30'),'Parent',hResAx)%</span>
+0088 <span class="comment">%jj=get(h,'Extent')*[0;1;0;0]</span>
+0089 <span class="comment">%text(0,jj-5,'Parameters :','Parent',hResAx,...</span>
+0090     <span class="comment">%'FontWeight','Bold','FontSize',FS(14));</span>
+0091 
+0092 
+0093 <span class="comment">%-Plot design matrix</span>
+0094 <span class="comment">%-----------------------------------------------------------------------</span>
+0095 hDesMtx   = axes(<span class="string">'Parent'</span>,Fgraph,<span class="string">'Position'</span>,[0.65 0.55 0.25 0.25]);
+0096 hDesMtxIm = image((xX.nKX+1)*32);
+0097 set(hDesMtx,<span class="keyword">...</span>
+0098     <span class="string">'XTick'</span>,spm_DesRep(<span class="string">'ScanTick'</span>,size(xX.nKX,2),10),<span class="keyword">...</span>
+0099     <span class="string">'YTick'</span>,spm_DesRep(<span class="string">'ScanTick'</span>,size(xX.nKX,1),24),<span class="string">'TickDir'</span>,<span class="string">'out'</span>)
+0100 xlabel(<span class="string">'Design matrix'</span>)
+0101 
+0102 <span class="comment">%-Plot contrasts</span>
+0103 <span class="comment">%-----------------------------------------------------------------------</span>
+0104 nPar   = size(xX.X,2);
+0105 xx     = [repmat([0:nPar-1],2,1);repmat([1:nPar],2,1)];
+0106 nCon   = length(xC);
+0107 <span class="keyword">if</span> nCon
+0108     dy     = 0.15/max(nCon,2);
+0109     hConAx = axes(<span class="string">'Position'</span>,[0.65 (0.80 + dy*.1) 0.25 dy*(nCon-.1)],<span class="keyword">...</span>
+0110         <span class="string">'Tag'</span>,<span class="string">'ConGrphAx'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0111     title(<span class="string">'contrast(s)'</span>)
+0112     htxt = get(hConAx,<span class="string">'title'</span>); 
+0113     set(htxt,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'on'</span>)
+0114 <span class="keyword">end</span>
+0115 
+0116 <span class="keyword">for</span> ii = nCon:-1:1
+0117     axes(<span class="string">'Position'</span>,[0.65 (0.80 + dy*(nCon-ii+.1)) 0.25 dy*.9])
+0118     <span class="keyword">if</span> xC.STAT == <span class="string">'T'</span> &amp; size(xC.c,2) == 1
+0119 
+0120     <span class="comment">%-Single vector contrast for SPM{t} - bar</span>
+0121     <span class="comment">%---------------------------------------------------------------</span>
+0122     yy = [zeros(1,nPar);repmat(xC.c',2,1);zeros(1,nPar)];
+0123     h = patch(xx,yy,[1,1,1]*.5);
+0124     set(gca,<span class="string">'Tag'</span>,<span class="string">'ConGrphAx'</span>,<span class="keyword">...</span>
+0125         <span class="string">'Box'</span>,<span class="string">'off'</span>,<span class="string">'TickDir'</span>,<span class="string">'out'</span>,<span class="keyword">...</span>
+0126         <span class="string">'XTick'</span>,spm_DesRep(<span class="string">'ScanTick'</span>,nPar,10)-0.5,<span class="string">'XTickLabel'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0127         <span class="string">'XLim'</span>,    [0,nPar],<span class="keyword">...</span>
+0128         <span class="string">'YTick'</span>,[-1,0,+1],<span class="string">'YTickLabel'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0129         <span class="string">'YLim'</span>,    [min(xC.c),max(xC.c)] + <span class="keyword">...</span>
+0130             [-1 +1] * max(abs(xC.c))/10    )
+0131 
+0132     <span class="keyword">else</span>
+0133 
+0134     <span class="comment">%-F-contrast - image</span>
+0135     <span class="comment">%---------------------------------------------------------------</span>
+0136     h = image((xC.c'/max(abs(xC.c(:)))+1)*32);
+0137     set(gca,<span class="string">'Tag'</span>,<span class="string">'ConGrphAx'</span>,<span class="keyword">...</span>
+0138         <span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'TickDir'</span>,<span class="string">'out'</span>,<span class="keyword">...</span>
+0139         <span class="string">'XTick'</span>,spm_DesRep(<span class="string">'ScanTick'</span>,nPar,10),<span class="string">'XTickLabel'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0140         <span class="string">'XLim'</span>,    [0,nPar]+0.5,<span class="keyword">...</span>
+0141         <span class="string">'YTick'</span>,[0:size(xC.c,2)]+0.5,<span class="string">'YTickLabel'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0142         <span class="string">'YLim'</span>,    [0,size(xC.c,2)]+0.5    )
+0143 
+0144     <span class="keyword">end</span>
+0145     
+0146     
+0147 <span class="keyword">end</span>
+0148 
+0149 j=1;
+0150 CumVar=0;
+0151 VarTot=sum(mw.MDS.ds);
+0152 <span class="keyword">for</span> i=1:length(mw.MDS.ds)
+0153 val=sprintf(<span class="string">'%3.3f'</span>,mw.MDS.ds(i));
+0154 Pvar=mw.MDS.ds(i)*100/VarTot;sPvar=sprintf(<span class="string">'%3.2f'</span>,Pvar);
+0155 CumVar=CumVar+Pvar;sCumVar=sprintf(<span class="string">'%3.2f'</span>,CumVar);
+0156 <span class="keyword">if</span> strcmp(mw.typeAnal,<span class="string">'MLM'</span>)
+0157     Pval=sprintf(<span class="string">'%2.2g'</span>,mw.MDS.stat.Pf(i));
+0158 <span class="keyword">else</span>
+0159     Pval=<span class="string">' '</span>;
+0160 <span class="keyword">end</span>
+0161 
+0162 <span class="keyword">if</span> (i==mw.MDS.LEig(j) &amp; i&lt;length(mw.MDS.LEig)+1)    
+0163 BotInfo{i}=sprintf(<span class="string">'%+5s  %-33s  %+8s  %+6s  %+6s %+8s'</span>,num2str(i),spm_str_manip(mw.MDS.Eig{cursp}(i,:),<span class="string">'k30'</span>),val,sPvar,sCumVar,Pval); 
+0164 <span class="keyword">if</span>(j+1&gt;length(mw.MDS.LEig)) ; 
+0165 <span class="keyword">else</span>  
+0166 j=j+1;
+0167 <span class="keyword">end</span>
+0168 
+0169 <span class="keyword">else</span> 
+0170 BotInfo{i}=sprintf(<span class="string">'%+5s  %-33s  %+8s  %+6s  %+6s %+8s'</span>,num2str(i),<span class="string">'not computed'</span>,val,sPvar,sCumVar,Pval);
+0171 <span class="keyword">end</span>
+0172 <span class="keyword">end</span>
+0173 
+0174 HeadBotInfo=sprintf(<span class="string">'%+5s  %-33s  %+8s  %+6s  %+6s %+8s'</span>,<span class="string">'Id'</span>,<span class="string">'Name'</span>,<span class="string">'Value'</span>,<span class="string">'%Var'</span>,<span class="string">'%CumVar'</span>,<span class="string">'Pval'</span>);
+0175 
+0176  <span class="comment">%-Table axes &amp; Title</span>
+0177 <span class="comment">%-----------------------------------------------------------------------</span>
+0178 hAx   = axes(<span class="string">'Position'</span>,[0.05 0.1 0.9 0.4],<span class="keyword">...</span>
+0179     <span class="string">'DefaultTextFontSize'</span>,FS(8),<span class="keyword">...</span>
+0180     <span class="string">'DefaultTextInterpreter'</span>,<span class="string">'Tex'</span>,<span class="keyword">...</span>
+0181     <span class="string">'DefaultTextVerticalAlignment'</span>,<span class="string">'Baseline'</span>,<span class="keyword">...</span>
+0182     <span class="string">'Units'</span>,<span class="string">'points'</span>,<span class="keyword">...</span>
+0183     <span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0184 AxPos = get(hAx,<span class="string">'Position'</span>); set(hAx,<span class="string">'YLim'</span>,[0,AxPos(4)])
+0185 dy    = FS(9);
+0186 y     = floor(AxPos(4)) - dy;
+0187 
+0188 text(0,y,<span class="string">'Statistics:'</span>,<span class="keyword">...</span>
+0189     <span class="string">'FontSize'</span>,FS(11),<span class="string">'FontWeight'</span>,<span class="string">'Bold'</span>);    y = y - dy/2;
+0190 line([0 1],[y y],<span class="string">'LineWidth'</span>,3,<span class="string">'Color'</span>,<span class="string">'r'</span>),    y = y - 9*dy/8;
+0191 
+0192  <span class="comment">%-Construct table header</span>
+0193 <span class="comment">%-----------------------------------------------------------------------</span>
+0194 set(gca,<span class="string">'DefaultTextFontName'</span>,PF.courier,<span class="string">'DefaultTextFontSize'</span>,FS(8))
+0195 text(0.01,y,HeadBotInfo,<span class="string">'FontSize'</span>,FS(8));    y = y - 9*dy/8;
+0196 
+0197 Hc = [];
+0198 <span class="comment">%h = text(0.01,y,    BotInfo,'FontSize',FS(9));        %Hc = [Hc,h];</span>
+0199 
+0200 CBPlt=sprintf(<span class="string">'data=get(gcbo,''UserData'');if isempty(data), return;end;set(data{3},''Visible'',''on''); '</span>);
+0201 CBPlt=sprintf(<span class="string">'%s val=get(gcbo,''Value'');set(data{2},''CurrentAxes'',data{3});bar(data{1}(:,val));'</span>,CBPlt);
+0202 
+0203 ListInfo=uicontrol(<span class="string">'Parent'</span>,Fgraph, <span class="keyword">...</span>
+0204     <span class="string">'Units'</span>,<span class="string">'normalized'</span>, <span class="keyword">...</span>
+0205     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0206     <span class="string">'FontName'</span>,PF.courier, <span class="keyword">...</span>
+0207     <span class="string">'FontSize'</span>,FS(8), <span class="keyword">...</span>
+0208     <span class="string">'Position'</span>,[0.05 0.06 0.9 0.4], <span class="keyword">...</span>
+0209     <span class="string">'String'</span>,BotInfo, <span class="keyword">...</span>
+0210     <span class="string">'Style'</span>,<span class="string">'listbox'</span>, <span class="keyword">...</span>
+0211     <span class="string">'Tag'</span>,<span class="string">'Listbox1'</span>, <span class="keyword">...</span>
+0212     <span class="string">'callback'</span>,CBPlt,<span class="keyword">...</span>
+0213     <span class="string">'Value'</span>,1);
+0214 
+0215 
+0216 
+0217 
+0218 PlCt = axes(<span class="string">'Parent'</span>,Fgraph, <span class="keyword">...</span>
+0219     <span class="string">'CameraUpVector'</span>,[0 1 0], <span class="keyword">...</span>
+0220     <span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0221     <span class="string">'Color'</span>,[1 1 1], <span class="keyword">...</span>
+0222     <span class="string">'FontName'</span>,PF.courier, <span class="keyword">...</span>
+0223     <span class="string">'Position'</span>,[0.05 0.52 0.5 0.25], <span class="keyword">...</span>
+0224     <span class="string">'Tag'</span>,<span class="string">'AKF'</span>, <span class="keyword">...</span>
+0225     <span class="string">'XColor'</span>,[0 0 0], <span class="keyword">...</span>
+0226     <span class="string">'YColor'</span>,[0 0 0], <span class="keyword">...</span>
+0227     <span class="string">'ZColor'</span>,[0 0 0]);
+0228 <span class="keyword">if</span> strcmp(mw.typeAnal,<span class="string">'MLM'</span>)
+0229     set(ListInfo,<span class="string">'UserData'</span>,{mw.MDS.M12*mw.MDS.u,Fgraph,PlCt});
+0230 <span class="keyword">else</span>
+0231     set(ListInfo,<span class="string">'UserData'</span>,[]);
+0232 <span class="keyword">end</span>
+0233 
+0234 
+0235 
+0236 
+0237 <a name="_sub1" href="#_subfunctions" class="code">function [res,n]=sf_strsplit(str,fs)</a>
+0238 
+0239 <span class="comment">%format [a,n]=str_split(str,fs)</span>
+0240 <span class="comment">%- Split the string str into cell array elements a{1}, a{2},</span>
+0241 <span class="comment">%- a{n},  and  return n. The separation will be</span>
+0242 <span class="comment">%- done with the expression  fs</span>
+0243 <span class="comment">%-</span>
+0244 
+0245 
+0246 <span class="keyword">if</span> length(fs) &gt;1 
+0247     disp(<span class="string">'error'</span>)
+0248     <span class="keyword">return</span>;
+0249 <span class="keyword">end</span>
+0250 
+0251 id=find(str==fs);
+0252 <span class="keyword">if</span> isempty(id)
+0253     n=1;
+0254     res{n}=str;
+0255     <span class="keyword">return</span>
+0256 <span class="keyword">end</span>
+0257 sz=length(str);
+0258 cur=1;
+0259 n=1;
+0260 <span class="keyword">for</span> i=1:length(id)
+0261     
+0262     tmp=str(cur:id(i)-1);
+0263     <span class="keyword">if</span> length(tmp)
+0264        res{n}=str(cur:id(i)-1);
+0265        n=n+1;
+0266     <span class="keyword">end</span>
+0267     cur=id(i)+1;
+0268     
+0269     <span class="keyword">if</span> (id(i)==sz)
+0270         <span class="keyword">break</span>;
+0271     <span class="keyword">end</span>
+0272 
+0273 
+0274 <span class="keyword">end</span>
+0275 
+0276 <span class="keyword">if</span> id(length(id))&lt;sz
+0277     res{n}=str(id(length(id))+1:sz);
+0278 
+0279 <span class="keyword">else</span> n=n-1;
+0280 <span class="keyword">end</span>
+0281     
+0282 
+0283 
+0284 
+0285 
+0286 
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mm_ui</title>
+  <meta name="keywords" content="mm_ui">
+  <meta name="description" content="- Interface functions for ploting MLM or SVD analysis">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>mm_ui
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>- Interface functions for ploting MLM or SVD analysis</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function mm_ui(action, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">- Interface functions for ploting MLM or SVD analysis
+================================================================================
+-  Copyright (C) 1997-2002 CEA
+-  This software and supporting documentation were developed by
+-       CEA/DSV/SHFJ/UNAF
+-       4 place du General Leclerc
+-       91401 Orsay cedex
+-       France
+================================================================================
+</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fig=ui_init</a></li>
+<li><a href="#_sub2" class="code">function flag=ui_plot(mw)</a></li>
+<li><a href="#_sub3" class="code">function flag=ui_load(mw)</a></li>
+<li><a href="#_sub4" class="code">function fig=ui_initPlot(varargin)</a></li>
+<li><a href="#_sub5" class="code">function flag=ui_flip(mw)</a></li>
+<li><a href="#_sub6" class="code">function flag=ui_plotspec(mw,obj)</a></li>
+<li><a href="#_sub7" class="code">function flag=ui_close(mw)</a></li>
+<li><a href="#_sub8" class="code">function flag=ui_zoom(mw)</a></li>
+</ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mm_ui(action, varargin)</a>
+0002 <span class="comment">%- Interface functions for ploting MLM or SVD analysis</span>
+0003 <span class="comment">%================================================================================</span>
+0004 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0005 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0006 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0007 <span class="comment">%-       4 place du General Leclerc</span>
+0008 <span class="comment">%-       91401 Orsay cedex</span>
+0009 <span class="comment">%-       France</span>
+0010 <span class="comment">%================================================================================</span>
+0011 
+0012 
+0013     
+0014     <span class="keyword">if</span> nargin == 0
+0015         action    = <span class="string">'init'</span>;
+0016     <span class="keyword">end</span>
+0017     
+0018     <span class="keyword">switch</span> lower(action)
+0019         <span class="keyword">case</span> <span class="string">'init'</span>
+0020             H    = <a href="#_sub1" class="code" title="subfunction fig=ui_init">ui_init</a>; 
+0021         <span class="keyword">case</span> <span class="string">'plot'</span>
+0022             flag    = <a href="#_sub2" class="code" title="subfunction flag=ui_plot(mw)">ui_plot</a>(varargin{1});
+0023         <span class="keyword">case</span> <span class="string">'load'</span>
+0024             flag     = <a href="#_sub3" class="code" title="subfunction flag=ui_load(mw)">ui_load</a>(varargin{1});
+0025         <span class="keyword">case</span> <span class="string">'flip'</span>
+0026             flag    = <a href="#_sub5" class="code" title="subfunction flag=ui_flip(mw)">ui_flip</a>(varargin{1});
+0027         <span class="keyword">case</span> <span class="string">'close'</span>
+0028             flag    = <a href="#_sub7" class="code" title="subfunction flag=ui_close(mw)">ui_close</a>(varargin{1});
+0029         <span class="keyword">case</span> <span class="string">'zoom'</span> 
+0030             flag    = <a href="#_sub8" class="code" title="subfunction flag=ui_zoom(mw)">ui_zoom</a>(varargin{1});
+0031         <span class="keyword">case</span> <span class="string">'initplot'</span>
+0032             fig    = <a href="#_sub4" class="code" title="subfunction fig=ui_initPlot(varargin)">ui_initPlot</a>(varargin{1},varargin{2});
+0033         <span class="keyword">case</span> <span class="string">'plotspec'</span>
+0034             fig    = <a href="#_sub6" class="code" title="subfunction flag=ui_plotspec(mw,obj)">ui_plotspec</a>(varargin{1},varargin{2});
+0035         
+0036         <span class="keyword">otherwise</span>,
+0037             warning(<span class="string">'Unknown action string'</span>)
+0038 <span class="keyword">end</span>;
+0039 
+0040 
+0041 
+0042 <span class="comment">%====================================================================</span>
+0043 <span class="comment">%- init function set window and callbacks.</span>
+0044 
+0045 <a name="_sub1" href="#_subfunctions" class="code">function fig=ui_init</a>
+0046 
+0047 helpon={<span class="keyword">...</span>
+0048 <span class="string">'MM Visualization'</span>
+0049 <span class="string">'__________________________________________'</span>
+0050 <span class="string">'To start the visualisation component of the toolbox, press on &quot;Load&quot;'</span>
+0051 <span class="string">'Load the SVD.mat or the MLM.mat file depending on the analysis'</span>
+0052 <span class="string">'performed.'</span>
+0053 <span class="string">''</span>
+0054 <span class="string">'The display will show the spectrum of the singular values'</span>
+0055 <span class="string">'of the analysis,a temporal component and a spatial component'</span>
+0056 <span class="string">'when an eigen image number is chosen.'</span>
+0057 <span class="string">''</span>
+0058 <span class="string">'The MM info button displays the parameters of the analysis'</span>
+0059 <span class="string">'and statistics'</span>
+0060 <span class="string">''</span>
+0061 <span class="string">'Note that several eigen image numbers can be entered at once.'</span>
+0062 <span class="string">'You can zoom on the time series with the min and max values'</span>
+0063 <span class="string">'You can flip the time courses and the images by entering -1'</span>
+0064 <span class="string">''</span>
+0065 <span class="string">'For MLM, clicking on the result table will show the contrast'</span>
+0066 <span class="string">'corresponding to the time course and eigen-images.'</span>};
+0067 
+0068 mw.flag=0;
+0069 
+0070 mw.mw = figure(<span class="string">'Color'</span>,[0.8 0.8 0.8], <span class="keyword">...</span>
+0071     <span class="string">'Name'</span>,<span class="string">'MultiVariate Tool'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0072     <span class="string">'unit'</span>,<span class="string">'normal'</span>,<span class="keyword">...</span>
+0073     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0074     <span class="string">'MenuBar'</span>,<span class="string">'none'</span>, <span class="keyword">...</span>
+0075     <span class="string">'Position'</span>,[0.015 0.52 0.40 0.40], <span class="keyword">...</span>
+0076     <span class="string">'Tag'</span>,<span class="string">'main_ui'</span>, <span class="keyword">...</span>
+0077     <span class="string">'ToolBar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0078     <span class="string">'resize'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0079     <span class="string">'CloseRequestFcn'</span>,<span class="string">'mm_ui(''close'',gcbf)'</span>);
+0080 fig=mw.mw;
+0081 menuHandle = uimenu(mw.mw,<span class="keyword">...</span>
+0082         <span class="string">'Label'</span>,<span class="string">'&amp;Command'</span>);
+0083 
+0084 uimenu(menuHandle,<span class="keyword">...</span>
+0085     <span class="string">'Label'</span>,<span class="string">'Load'</span>,<span class="keyword">...</span>
+0086     <span class="string">'Tag'</span>,<span class="string">'Load'</span>,<span class="keyword">...</span>
+0087     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''load'',gcbf);mm_ui(''zoom'',gcbf)'</span>);
+0088 
+0089 uimenu(menuHandle,<span class="keyword">...</span>
+0090     <span class="string">'Label'</span>,<span class="string">'Compute'</span>,<span class="keyword">...</span>
+0091     <span class="string">'Tag'</span>,<span class="string">'Compute'</span>,<span class="keyword">...</span>
+0092     <span class="string">'Callback'</span>,<span class="string">'MM'</span>);
+0093 uimenu(menuHandle,<span class="keyword">...</span>
+0094     <span class="string">'Label'</span>,<span class="string">'Close'</span>,<span class="keyword">...</span>
+0095     <span class="string">'Tag'</span>,<span class="string">'Close'</span>,<span class="keyword">...</span>
+0096     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''close'',gcbf)'</span>);
+0097 
+0098 menuHandle = uimenu(mw.mw,<span class="keyword">...</span>
+0099         <span class="string">'Label'</span>,<span class="string">'&amp;Option'</span>);
+0100 submenuHandle = uimenu(menuHandle,<span class="keyword">...</span>
+0101         <span class="string">'Label'</span>,<span class="string">'Plot Eigenvalues'</span>,<span class="keyword">...</span>
+0102         <span class="string">'tag'</span>, <span class="string">'Plotopt'</span>);
+0103 uimenu(submenuHandle,<span class="keyword">...</span>
+0104     <span class="string">'Label'</span>,<span class="string">'Points'</span>,<span class="keyword">...</span>
+0105     <span class="string">'Tag'</span>,<span class="string">'Points'</span>,<span class="keyword">...</span>
+0106     <span class="string">'Checked'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0107     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''plotspec'',gcbf,gcbo);mm_ui(''zoom'',gcbf)'</span>);
+0108 mw.plotspec=<span class="string">'Points'</span>;
+0109 
+0110 uimenu(submenuHandle,<span class="keyword">...</span>
+0111     <span class="string">'Label'</span>,<span class="string">'Line'</span>,<span class="keyword">...</span>
+0112     <span class="string">'Tag'</span>,<span class="string">'Line'</span>,<span class="keyword">...</span>
+0113     <span class="string">'Checked'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0114     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''plotspec'',gcbf,gcbo);mm_ui(''zoom'',gcbf)'</span>);
+0115 uimenu(submenuHandle,<span class="keyword">...</span>
+0116     <span class="string">'Label'</span>,<span class="string">'Bar'</span>,<span class="keyword">...</span>
+0117     <span class="string">'Tag'</span>,<span class="string">'Bar'</span>,<span class="keyword">...</span>
+0118     <span class="string">'Checked'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0119     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''plotspec'',gcbf,gcbo);mm_ui(''zoom'',gcbf)'</span>);
+0120     
+0121 
+0122 
+0123 mw.wload = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0124     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0125     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0126     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''load'',gcbf);'</span>, <span class="keyword">...</span>
+0127     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0128     <span class="string">'Position'</span>,[0.046 0.94 0.21 0.062], <span class="keyword">...</span>
+0129     <span class="string">'String'</span>,<span class="string">'LOAD'</span>, <span class="keyword">...</span>
+0130     <span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0131     <span class="string">'Tag'</span>,<span class="string">'bload'</span>);
+0132 
+0133 mw.wcomp = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0134     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0135     <span class="string">'BackgroundColor'</span>,[0 0.4 0.4], <span class="keyword">...</span>
+0136     <span class="string">'Callback'</span>,<span class="string">'MM'</span>, <span class="keyword">...</span>
+0137     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0138     <span class="string">'Position'</span>,[0.75 0.94 0.21 0.062], <span class="keyword">...</span>
+0139     <span class="string">'String'</span>,<span class="string">'compute'</span>, <span class="keyword">...</span>
+0140     <span class="string">'visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0141     <span class="string">'Tag'</span>,<span class="string">'bcomp'</span>);
+0142 
+0143 mw.area = axes(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0144     <span class="string">'CameraUpVector'</span>,[0 1 0], <span class="keyword">...</span>
+0145     <span class="string">'CameraUpVectorMode'</span>,<span class="string">'manual'</span>, <span class="keyword">...</span>
+0146     <span class="string">'Color'</span>,[1 1 1], <span class="keyword">...</span>
+0147     <span class="string">'Position'</span>,[0.05 0.08 0.775 0.8], <span class="keyword">...</span>
+0148     <span class="string">'Tag'</span>,<span class="string">'area'</span>, <span class="keyword">...</span>
+0149     <span class="string">'Xticklabel'</span>,<span class="string">''</span>, <span class="keyword">...</span>
+0150     <span class="string">'Yticklabel'</span>,<span class="string">''</span>, <span class="keyword">...</span>
+0151     <span class="string">'XColor'</span>,[0 0 0], <span class="keyword">...</span>
+0152     <span class="string">'YColor'</span>,[0 0 0]);
+0153 mw.helpon = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0154     <span class="string">'unit'</span>,<span class="string">'normal'</span>,<span class="keyword">...</span>
+0155         <span class="string">'Position'</span>,[0.05 0.08 0.775 0.8], <span class="keyword">...</span>
+0156     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0157     <span class="string">'Min'</span>, 0, <span class="keyword">...</span>
+0158     <span class="string">'Max'</span>, 2, <span class="keyword">...</span>
+0159     <span class="string">'Value'</span>, [], <span class="keyword">...</span>
+0160      <span class="string">'Callback'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0161     <span class="string">'Tag'</span>,<span class="string">'description'</span>,<span class="keyword">...</span>
+0162     <span class="string">'style'</span>,<span class="string">'list'</span>,<span class="keyword">...</span>
+0163     <span class="string">'string'</span>, <span class="string">' '</span>);
+0164 
+0165 
+0166 h2 = text(<span class="string">'Parent'</span>,mw.area, <span class="keyword">...</span>
+0167     <span class="string">'Color'</span>,[0 0 0], <span class="keyword">...</span>
+0168     <span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0169     <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="keyword">...</span>
+0170     <span class="string">'Position'</span>,[0.5 -0.07 9.2], <span class="keyword">...</span>
+0171     <span class="string">'Tag'</span>,<span class="string">'Axes1Text4'</span>, <span class="keyword">...</span>
+0172     <span class="string">'VerticalAlignment'</span>,<span class="string">'cap'</span>);
+0173 set(get(h2,<span class="string">'Parent'</span>),<span class="string">'XLabel'</span>,h2);
+0174 h2 = text(<span class="string">'Parent'</span>,mw.area, <span class="keyword">...</span>
+0175     <span class="string">'Color'</span>,[0 0 0], <span class="keyword">...</span>
+0176     <span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0177     <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="keyword">...</span>
+0178     <span class="string">'Position'</span>,[-0.06 0.5 9.2], <span class="keyword">...</span>
+0179     <span class="string">'Rotation'</span>,90, <span class="keyword">...</span>
+0180     <span class="string">'Tag'</span>,<span class="string">'Axes1Text3'</span>, <span class="keyword">...</span>
+0181     <span class="string">'VerticalAlignment'</span>,<span class="string">'baseline'</span>);
+0182 set(get(h2,<span class="string">'Parent'</span>),<span class="string">'YLabel'</span>,h2);
+0183 h2 = text(<span class="string">'Parent'</span>,mw.area, <span class="keyword">...</span>
+0184     <span class="string">'Color'</span>,[0 0 0], <span class="keyword">...</span>
+0185     <span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0186     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>, <span class="keyword">...</span>
+0187     <span class="string">'Position'</span>,[-0.06 1.13 9.2], <span class="keyword">...</span>
+0188     <span class="string">'Tag'</span>,<span class="string">'Axes1Text2'</span>, <span class="keyword">...</span>
+0189     <span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0190 set(get(h2,<span class="string">'Parent'</span>),<span class="string">'ZLabel'</span>,h2);
+0191 h2 = text(<span class="string">'Parent'</span>,mw.area, <span class="keyword">...</span>
+0192     <span class="string">'Color'</span>,[0 0 0], <span class="keyword">...</span>
+0193     <span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0194     <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>, <span class="keyword">...</span>
+0195     <span class="string">'Position'</span>,[0.5 1.02 9.2], <span class="keyword">...</span>
+0196     <span class="string">'Tag'</span>,<span class="string">'Axes1Text1'</span>, <span class="keyword">...</span>
+0197     <span class="string">'VerticalAlignment'</span>,<span class="string">'bottom'</span>);
+0198 set(get(h2,<span class="string">'Parent'</span>),<span class="string">'Title'</span>,h2);
+0199 
+0200 
+0201 
+0202 
+0203 
+0204 mw.wlabel_sub = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0205     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0206     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0207     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0208     <span class="string">'Position'</span>,[ 0.83 0.83 0.15 0.05 ], <span class="keyword">...</span>
+0209     <span class="string">'String'</span>,<span class="string">' Space : '</span>, <span class="keyword">...</span>
+0210     <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0211     <span class="string">'Tag'</span>,<span class="string">'l_e_sub'</span>);
+0212 
+0213 mw.wedit_sub = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0214     <span class="string">'Units'</span>,<span class="string">'norm'</span>, <span class="keyword">...</span>
+0215     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0216     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0217     <span class="string">'Position'</span>,[0.83 0.78 0.15 0.05], <span class="keyword">...</span>
+0218     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''plot'',gcbf);'</span>, <span class="keyword">...</span>
+0219     <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0220     <span class="string">'Tag'</span>,<span class="string">'e_sub'</span>);
+0221 
+0222 mw.wlabel_eig = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0223     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0224     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0225     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0226     <span class="string">'Position'</span>,[ 0.83 0.71 0.15 0.05 ], <span class="keyword">...</span>
+0227     <span class="string">'String'</span>,<span class="string">' Eigen : '</span>, <span class="keyword">...</span>
+0228     <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0229     <span class="string">'Tag'</span>,<span class="string">'l_e_eig'</span>);
+0230 mw.wedit_eig = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0231     <span class="string">'Units'</span>,<span class="string">'norm'</span>, <span class="keyword">...</span>
+0232     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0233     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0234     <span class="string">'Position'</span>,[0.83 0.66 0.15 0.05], <span class="keyword">...</span>
+0235     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''plot'',gcbf);'</span>, <span class="keyword">...</span>
+0236     <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0237     <span class="string">'Tag'</span>,<span class="string">'e_eig'</span>);
+0238 
+0239 h1 = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0240     <span class="string">'Units'</span>,<span class="string">'norm'</span>, <span class="keyword">...</span>
+0241     <span class="string">'BackgroundColor'</span>,[0.70 0.70 0.7], <span class="keyword">...</span>
+0242     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0243     <span class="string">'Position'</span>,[0.83 0.52 0.15 0.05], <span class="keyword">...</span>
+0244     <span class="string">'String'</span>,<span class="string">'flip image'</span>, <span class="keyword">...</span>
+0245     <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0246     <span class="string">'Tag'</span>,<span class="string">'StaticText1'</span>);
+0247 
+0248 mw.wedit_flip = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0249     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0250     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0251     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0252     <span class="string">'Position'</span>,[ 0.83 0.47 0.15 0.05 ], <span class="keyword">...</span>
+0253     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''flip'',gcbf);'</span>, <span class="keyword">...</span>
+0254     <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0255     <span class="string">'Tag'</span>,<span class="string">'EditText1'</span>);
+0256 
+0257 mw.wmin = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0258     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0259     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0260     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''zoom'',gcbf);'</span>, <span class="keyword">...</span>
+0261     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0262     <span class="string">'Position'</span>,[ 0.83 0.185 0.15 0.05 ], <span class="keyword">...</span>
+0263     <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0264     <span class="string">'Tag'</span>,<span class="string">'EditText1'</span>);
+0265 h1 = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0266     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0267     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0268     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0269     <span class="string">'Position'</span>,[ 0.83 0.235 0.15 0.05 ], <span class="keyword">...</span>
+0270     <span class="string">'String'</span>,<span class="string">'min'</span>, <span class="keyword">...</span>
+0271     <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0272     <span class="string">'Tag'</span>,<span class="string">'StaticText1'</span>);
+0273 mw.wmax = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0274     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0275     <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0276     <span class="string">'Callback'</span>,<span class="keyword">...</span>
+0277     <span class="string">'mm_ui(''zoom'',gcbf);'</span>, <span class="keyword">...</span>
+0278     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0279     <span class="string">'Position'</span>,[ 0.83 0.0715 0.15 0.05 ], <span class="keyword">...</span>
+0280     <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0281     <span class="string">'Tag'</span>,<span class="string">'EditText1'</span>);
+0282 h1 = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0283     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0284     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0285     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0286     <span class="string">'Position'</span>,[ 0.83 0.12 0.15 0.05 ], <span class="keyword">...</span>
+0287     <span class="string">'String'</span>,<span class="string">'max'</span>, <span class="keyword">...</span>
+0288     <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0289     <span class="string">'Tag'</span>,<span class="string">'StaticText1'</span>);
+0290 mw.winfo = uicontrol(<span class="string">'Parent'</span>,mw.mw, <span class="keyword">...</span>
+0291     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0292     <span class="string">'Callback'</span>,<span class="keyword">...</span>
+0293     <span class="string">'H=gcbf;mm_info(H);'</span>, <span class="keyword">...</span>
+0294     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0295     <span class="string">'Position'</span>,[ 0.83 0.35 0.15 0.05 ], <span class="keyword">...</span>
+0296     <span class="string">'String'</span>,<span class="string">'Info'</span>, <span class="keyword">...</span>
+0297     <span class="string">'Tag'</span>,<span class="string">'Pushbutton1'</span>);
+0298 
+0299 mw.wplot=[];
+0300 <span class="comment">%set(mw.helpon,'Enable', 'on', 'Max', 1, 'Value', 1);</span>
+0301 set(mw.helpon,<span class="string">'string'</span>,helpon);
+0302 set(mw.helpon,<span class="string">'value'</span>,[]);
+0303 set(mw.mw,<span class="string">'userdata'</span>,mw);
+0304 mw.wplot=<a href="#_sub4" class="code" title="subfunction fig=ui_initPlot(varargin)">ui_initPlot</a>(mw.mw,<span class="string">'init'</span>);
+0305 set(mw.mw,<span class="string">'userdata'</span>,mw);
+0306 
+0307 clear mw;
+0308 
+0309 <span class="comment">%====================================================================</span>
+0310 <span class="comment">%- ploting function</span>
+0311 <span class="comment">%- for MLM case plot predicted and observed time-course.</span>
+0312 <span class="comment">%- for SVD case plot obseved time-course.</span>
+0313 <span class="comment">%====================================================================</span>
+0314 <a name="_sub2" href="#_subfunctions" class="code">function flag=ui_plot(mw)</a>
+0315     
+0316     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0317     <span class="keyword">if</span> mw.flag==0 <span class="comment">%if no valid data return</span>
+0318     flag=0;
+0319     <span class="keyword">return</span>;
+0320     <span class="keyword">else</span>
+0321 
+0322     ok=0;
+0323     tmp=mw.wedit_eig;
+0324     str_cur=get(tmp,<span class="string">'string'</span>);
+0325     eval(<span class="string">'cur=str2num(str_cur);'</span>,<span class="string">'ok=1;'</span>);
+0326     <span class="keyword">end</span>
+0327     <span class="keyword">if</span> isempty(cur)
+0328         flag=0;
+0329        
+0330         <span class="keyword">return</span>;
+0331     <span class="keyword">end</span>
+0332     ok=0;
+0333     tmp=mw.wedit_sub;
+0334     str_cur=get(tmp,<span class="string">'string'</span>);
+0335     eval(<span class="string">'cursp=str2double(str_cur);'</span>,<span class="string">'ok=1;'</span>);
+0336     
+0337     <span class="keyword">if</span> isnan(cursp)|(cursp&gt;length(mw.MDS.Pmat))
+0338         cursp=1;
+0339         
+0340     <span class="keyword">end</span>
+0341     set(tmp,<span class="string">'string'</span>,num2str(cursp));
+0342     tmp=mw.wedit_flip;
+0343     str_flip=get(tmp,<span class="string">'string'</span>);
+0344     
+0345     
+0346     flip    = str2num(str_flip);
+0347     res    = length(cur) - length(flip);
+0348     <span class="keyword">if</span> (res&gt;0)
+0349         flip(length(flip)+1 : length(cur))=ones(1,res);
+0350     <span class="keyword">else</span>
+0351        flip=flip(1 : length(cur));
+0352     <span class="keyword">end</span>
+0353     
+0354     
+0355     id_cur=find(cur&lt;length(mw.MDS.ds)+1);
+0356     cur=cur(id_cur);
+0357     <span class="keyword">if</span> isempty(cur)
+0358         flag=0;
+0359         <span class="keyword">return</span>;
+0360     <span class="keyword">end</span>
+0361     
+0362     flip=sign(flip(id_cur));
+0363     
+0364 
+0365     mw.wplot=<a href="#_sub4" class="code" title="subfunction fig=ui_initPlot(varargin)">ui_initPlot</a>(mw.mw,<span class="string">'init'</span>);
+0366     set(mw.mw,<span class="string">'userdata'</span>,mw); <span class="comment">% Save data</span>
+0367  
+0368     
+0369     set(mw.wedit_flip,<span class="string">'string'</span>,num2str(flip));
+0370     set(mw.wedit_eig,<span class="string">'string'</span>,num2str(cur));
+0371 
+0372     k=size(cur,2);
+0373     lgd=<span class="string">'legend('</span>;
+0374 
+0375     <span class="keyword">for</span> i=1:k
+0376         lgd=sprintf(<span class="string">'%s''cp %d'','</span>,lgd,cur(i));
+0377     <span class="keyword">end</span>
+0378     lgd=lgd(1:length(lgd)-1);
+0379     lgd=[lgd <span class="string">');'</span>];
+0380 
+0381     [cc, ia, ib]    =    intersect(cur,mw.MDS.LEig);
+0382    
+0383 
+0384     data=get(mw.wplot,<span class="string">'UserData'</span>);
+0385     data.cur = cur;
+0386     data.cursp=cursp;
+0387     data.flip = diag(flip);
+0388     data.lgd=lgd;
+0389     set(mw.wplot,<span class="string">'UserData'</span>,data);
+0390 
+0391     mw.wplot=<a href="#_sub4" class="code" title="subfunction fig=ui_initPlot(varargin)">ui_initPlot</a>(mw.mw,<span class="string">'display'</span>);
+0392     set(mw.mw,<span class="string">'userdata'</span>,mw); <span class="comment">% Save data         </span>
+0393     <span class="keyword">if</span> ~isempty(cc)
+0394     spm_check_registration(mw.MDS.Eig{cursp}(cc,:));
+0395     flip=flip(ia);
+0396     <span class="keyword">global</span> st
+0397     <span class="keyword">for</span> i=1:size(cc,2)    
+0398         st.vols{i}.pinfo=st.vols{i}.pinfo*flip(i);
+0399     end    
+0400         spm_orthviews(<span class="string">'Redraw'</span>);
+0401     <span class="keyword">else</span>
+0402         disp(<span class="string">'Image not present'</span>);
+0403     <span class="keyword">end</span>
+0404         flag=mw.flag;
+0405     set(mw.mw,<span class="string">'userdata'</span>,mw); <span class="comment">% Save data</span>
+0406 
+0407 
+0408 <span class="comment">%====================================================================</span>
+0409 <span class="comment">%- loading function</span>
+0410 <span class="comment">%- load MLM.mat or SVD.mat</span>
+0411 <span class="comment">% create MDS structure that contain data and saved as mw (main_window) user-data</span>
+0412  
+0413 
+0414 <a name="_sub3" href="#_subfunctions" class="code">function flag=ui_load(mw)</a>
+0415     
+0416     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0417     flag=mw.flag;
+0418     cla(mw.mw);    
+0419     
+0420     
+0421     set(mw.wedit_eig,<span class="string">'string'</span>,<span class="string">''</span>);
+0422     set(mw.wedit_flip,<span class="string">'string'</span>,<span class="string">''</span>);
+0423     set(mw.wmin,<span class="string">'string'</span>,<span class="string">''</span>);
+0424     set(mw.wmax,<span class="string">'string'</span>,<span class="string">''</span>);
+0425     eval(<span class="string">'set(mw.wplot,''visible'',''off'')'</span>,<span class="string">';'</span>);
+0426 
+0427     <span class="keyword">if</span> ishandle(mw.wplot)
+0428         cla(mw.wplot);
+0429     <span class="keyword">end</span>
+0430 
+0431     Fmat        = spm_get(1,<span class="string">'*.mat'</span>,<span class="string">'Select MLM.mat or SVD.mat '</span>);
+0432     mw.typeAnal    = spm_str_manip(Fmat,<span class="string">'st'</span>);
+0433     cwd        = spm_str_manip(Fmat,<span class="string">'H'</span>);
+0434     mw.cwd        =cwd;
+0435 
+0436 
+0437     <span class="keyword">switch</span> mw.typeAnal
+0438 
+0439             <span class="keyword">case</span> <span class="string">'MLM'</span>
+0440                  load(fullfile(cwd,<span class="string">'MLM.mat'</span>));
+0441                  MDS=MLM;
+0442                  clear MLM;
+0443 
+0444             <span class="keyword">case</span> <span class="string">'SVD'</span>
+0445                  load(fullfile(cwd,<span class="string">'SVD.mat'</span>));
+0446                  MDS=SVD;
+0447                  clear SVD;
+0448             <span class="keyword">otherwise</span>
+0449                 error(<span class="string">'unknown type of analysis'</span>)
+0450     <span class="keyword">end</span>
+0451 
+0452     eiglen=0;
+0453     eiglen    = length(MDS.ds);
+0454     spacelen = length(MDS.Pmat);
+0455      <span class="keyword">if</span> eiglen
+0456 
+0457        set(mw.wmin,<span class="string">'string'</span>,<span class="string">'1'</span>);
+0458        set(mw.wmax,<span class="string">'string'</span>,num2str(eiglen));
+0459        set(mw.helpon,<span class="string">'visible'</span>,<span class="string">'off'</span>);
+0460        mw.flag=1;
+0461        mw.MDS=MDS;
+0462        clear MDS;
+0463 
+0464     <span class="keyword">else</span>
+0465         mw.flag=0;
+0466     <span class="keyword">end</span>
+0467     set(mw.wedit_sub,<span class="string">'string'</span>,<span class="string">'1'</span>);
+0468     flag=mw.flag;
+0469     set(mw.mw,<span class="string">'userdata'</span>,mw); <span class="comment">% Save updated data</span>
+0470     
+0471 
+0472 <span class="comment">%====================================================================</span>
+0473 <span class="comment">%- function initplot</span>
+0474 <span class="comment">%- initialize ploting window.</span>
+0475  <span class="keyword">function</span> fig=<a href="#_sub4" class="code" title="subfunction fig=ui_initPlot(varargin)">ui_initPlot</a>(varargin)
+0476 
+0477     mw=varargin{1};
+0478     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0479     action=varargin{2};
+0480     
+0481   <span class="keyword">switch</span> action
+0482     <span class="keyword">case</span> <span class="string">'init'</span>     
+0483      <span class="keyword">if</span> ~isempty(mw.wplot)
+0484             set(mw.wplot,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0485         fig=mw.wplot;
+0486         <span class="keyword">return</span> ;
+0487      <span class="keyword">end</span>
+0488      
+0489     h0 = figure(<span class="string">'CloseRequestFcn'</span>,<span class="string">'set(gcbf,''Visible'',''off'')'</span>, <span class="keyword">...</span>
+0490     <span class="string">'Color'</span>,[0.8 0.8 0.8], <span class="keyword">...</span>
+0491     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0492     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0493     <span class="string">'units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0494     <span class="string">'Position'</span>,[0.010 0.10 0.43 0.40], <span class="keyword">...</span>
+0495     <span class="string">'ResizeFcn'</span>,<span class="string">'legend(''ResizeLegend'')'</span>, <span class="keyword">...</span>
+0496     <span class="string">'Tag'</span>,<span class="string">'wplot'</span>, <span class="keyword">...</span>
+0497     <span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0498     <span class="string">'ToolBar'</span>,<span class="string">'none'</span>);
+0499     
+0500     h1 = axes(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0501     <span class="string">'Box'</span>,<span class="string">'on'</span>, <span class="keyword">...</span>
+0502     <span class="string">'CameraUpVector'</span>,[0 1 0], <span class="keyword">...</span>
+0503     <span class="string">'Color'</span>,[1 1 1], <span class="keyword">...</span>
+0504     <span class="string">'Position'</span>,[0.043 0.14 0.774 0.814], <span class="keyword">...</span>
+0505     <span class="string">'Tag'</span>,<span class="string">'Axes1'</span>, <span class="keyword">...</span>
+0506     <span class="string">'XColor'</span>,[0 0 0], <span class="keyword">...</span>
+0507     <span class="string">'YColor'</span>,[0 0 0], <span class="keyword">...</span>
+0508     <span class="string">'ZColor'</span>,[0 0 0]);
+0509     
+0510     h1 = uicontrol(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0511     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0512     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0513     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0514     <span class="string">'Position'</span>,[0.83 0.8 0.15 0.05 ], <span class="keyword">...</span>
+0515     <span class="string">'String'</span>,<span class="string">'observed'</span>, <span class="keyword">...</span>
+0516     <span class="string">'Style'</span>,<span class="string">'radiobutton'</span>, <span class="keyword">...</span>
+0517     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''initPlot'',getfield(get(gcbf,''UserData''),''mw''),''update'');'</span>, <span class="keyword">...</span>
+0518     <span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0519     <span class="string">'Tag'</span>,<span class="string">'ORad'</span>);
+0520     
+0521     h1 = uicontrol(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0522     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0523     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0524     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0525     <span class="string">'Position'</span>,[ 0.83 0.73 0.15 0.05 ], <span class="keyword">...</span>
+0526     <span class="string">'String'</span>,<span class="string">'Predicted'</span>, <span class="keyword">...</span>
+0527     <span class="string">'Style'</span>,<span class="string">'radiobutton'</span>, <span class="keyword">...</span>
+0528     <span class="string">'Callback'</span>,<span class="string">'mm_ui(''initPlot'',getfield(get(gcbf,''UserData''),''mw''),''update'');'</span>, <span class="keyword">...</span>
+0529     <span class="string">'Max'</span>,1,<span class="keyword">...</span>
+0530     <span class="string">'Min'</span>,0,<span class="keyword">...</span>
+0531     <span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0532     <span class="string">'Tag'</span>,<span class="string">'PRad'</span>);
+0533     
+0534     h1 = uicontrol(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0535     <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0536     <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0537     <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0538     <span class="string">'Position'</span>,[ 0.83 0.2 0.15 0.05 ], <span class="keyword">...</span>
+0539     <span class="string">'String'</span>,<span class="string">'max'</span>, <span class="keyword">...</span>
+0540     <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0541     <span class="string">'Tag'</span>,<span class="string">'StaticText1'</span>);
+0542     h1 = uicontrol(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0543      <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0544      <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0545      <span class="string">'Callback'</span>,<span class="string">'mm_ui(''initPlot'',getfield(get(gcbf,''UserData''),''mw''),''update'');'</span>, <span class="keyword">...</span>
+0546      <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0547      <span class="string">'Position'</span>,[ 0.83 0.15 0.15 0.05 ], <span class="keyword">...</span>
+0548      <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0549      <span class="string">'Tag'</span>,<span class="string">'wmax'</span>);
+0550     h1 = uicontrol(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0551      <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0552      <span class="string">'BackgroundColor'</span>,[0.7 0.7 0.7], <span class="keyword">...</span>
+0553      <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0554      <span class="string">'Position'</span>,[ 0.83 0.32 0.15 0.05 ], <span class="keyword">...</span>
+0555      <span class="string">'String'</span>,<span class="string">'min'</span>, <span class="keyword">...</span>
+0556      <span class="string">'Style'</span>,<span class="string">'text'</span>, <span class="keyword">...</span>
+0557      <span class="string">'Tag'</span>,<span class="string">'StaticText1'</span>);
+0558     h1 = uicontrol(<span class="string">'Parent'</span>,h0, <span class="keyword">...</span>
+0559      <span class="string">'Units'</span>,<span class="string">'normal'</span>, <span class="keyword">...</span>
+0560      <span class="string">'BackgroundColor'</span>,[1 1 1], <span class="keyword">...</span>
+0561      <span class="string">'Callback'</span>,<span class="string">'mm_ui(''initPlot'',getfield(get(gcbf,''UserData''),''mw''),''update'');'</span>, <span class="keyword">...</span>
+0562      <span class="string">'ListboxTop'</span>,0, <span class="keyword">...</span>
+0563      <span class="string">'Position'</span>,[ 0.83 0.27 0.15 0.05 ], <span class="keyword">...</span>
+0564      <span class="string">'Style'</span>,<span class="string">'edit'</span>, <span class="keyword">...</span>
+0565      <span class="string">'Tag'</span>,<span class="string">'wmin'</span>);
+0566 
+0567      data.mw=mw.mw;
+0568      set(h0,<span class="string">'UserData'</span>,data);
+0569      figH=findobj(h0,<span class="string">'Units'</span>,<span class="string">'points'</span>);
+0570      set(figH,<span class="string">'Units'</span>,<span class="string">'normalized'</span>);
+0571      fig=h0;
+0572 
+0573 <span class="keyword">case</span> <span class="string">'display'</span>
+0574     data=get(mw.wplot,<span class="string">'UserData'</span>);
+0575         set(0,<span class="string">'currentfigure'</span>,mw.wplot);
+0576     figure(mw.wplot);
+0577     cur=data.cur ;
+0578     cursp=data.cursp;
+0579     flip=data.flip;
+0580     lgd=data.lgd;
+0581     <span class="keyword">switch</span> mw.typeAnal
+0582 
+0583              <span class="keyword">case</span> <span class="string">'MLM'</span>
+0584                 
+0585                
+0586                len=length(mw.MDS.y);
+0587                
+0588                h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'ORad'</span>);
+0589                set(h1,<span class="string">'Value'</span>,1);
+0590                set(h1,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0591                h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'PRad'</span>);
+0592                set(h1,<span class="string">'Value'</span>,1);
+0593                set(h1,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0594              
+0595                
+0596                plot(mw.MDS.Y{cursp}(:,cur)*flip,<span class="string">'.-'</span>);
+0597                 hold on;
+0598                 plot(mw.MDS.y(:,cur)*flip,<span class="string">'--'</span>);
+0599                 eval(lgd);
+0600                 hold off;
+0601 
+0602 
+0603 
+0604              <span class="keyword">case</span> <span class="string">'SVD'</span>
+0605                 len=length(mw.MDS.u);
+0606                 h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'ORad'</span>);
+0607                 set(h1,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0608                 h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'PRad'</span>);
+0609                     set(h1,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0610                 plot(mw.MDS.u(:,cur)*flip);
+0611                 eval(lgd);
+0612              <span class="keyword">otherwise</span>
+0613                 error(<span class="string">'unknown type of analysis'</span>)
+0614     <span class="keyword">end</span>
+0615       h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'wmin'</span>);
+0616       set(h1,<span class="string">'string'</span>,sprintf(<span class="string">'1'</span>));
+0617       h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'wmax'</span>);
+0618       set(h1,<span class="string">'string'</span>,sprintf(<span class="string">'%d'</span>,len));
+0619       fig=mw.wplot;
+0620 
+0621 <span class="keyword">case</span> <span class="string">'update'</span>
+0622     
+0623     data=get(mw.wplot,<span class="string">'UserData'</span>);
+0624         set(0,<span class="string">'currentfigure'</span>,mw.wplot);
+0625     h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'wmin'</span>);
+0626     min=str2num(get(h1,<span class="string">'string'</span>));
+0627     h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'wmax'</span>);
+0628     max=str2num(get(h1,<span class="string">'string'</span>));
+0629     cur=data.cur ;
+0630     cursp=data.cursp;
+0631     flip=data.flip;
+0632     lgd=data.lgd;
+0633     
+0634     <span class="keyword">switch</span> mw.typeAnal
+0635 
+0636              <span class="keyword">case</span> <span class="string">'MLM'</span>
+0637                 
+0638                
+0639                len=length(mw.MDS.y);
+0640                
+0641                h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'ORad'</span>);
+0642                Oflag=get(h1,<span class="string">'Value'</span>);
+0643                
+0644                h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'PRad'</span>);
+0645                Pflag=get(h1,<span class="string">'Value'</span>);
+0646                <span class="keyword">if</span>( isempty(min) | min &gt; max-1|min&lt;1)
+0647                 min=1;
+0648                <span class="keyword">end</span>
+0649                <span class="keyword">if</span>( isempty(max) | min &gt; max-1|max &gt;len)
+0650                 max=len;
+0651                <span class="keyword">end</span>
+0652                
+0653                
+0654                <span class="keyword">if</span> Oflag
+0655               plot([min:max],mw.MDS.Y{cursp}(min:max,cur)*flip,<span class="string">'.-'</span>);
+0656                hold on;
+0657                <span class="keyword">end</span>
+0658                <span class="keyword">if</span> Pflag
+0659                plot([min:max],mw.MDS.y(min:max,cur)*flip,<span class="string">'--'</span>);
+0660                
+0661                <span class="keyword">end</span>
+0662                 eval(lgd);
+0663                hold off;
+0664 
+0665 
+0666 
+0667              <span class="keyword">case</span> <span class="string">'SVD'</span>
+0668                 len=length(mw.MDS.u);
+0669                 h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'ORad'</span>);
+0670                 set(h1,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0671                 h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'PRad'</span>);
+0672                     set(h1,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0673                 <span class="keyword">if</span>( isempty(min) | min &gt; max-1|min&lt;1)
+0674                 min=1;
+0675                 <span class="keyword">end</span>
+0676                 <span class="keyword">if</span>( isempty(max) | min &gt; max-1 | max &gt;len)
+0677                 max=len;
+0678                  <span class="keyword">end</span>
+0679                 plot([min:max],mw.MDS.u(min:max,cur)*flip);
+0680                 eval(lgd);
+0681              <span class="keyword">otherwise</span>
+0682                 error(<span class="string">'unknown type of analysis'</span>)
+0683     <span class="keyword">end</span>
+0684       h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'wmin'</span>);
+0685       set(h1,<span class="string">'string'</span>,min);
+0686       h1=findobj(mw.wplot,<span class="string">'Tag'</span>,<span class="string">'wmax'</span>);
+0687       set(h1,<span class="string">'string'</span>,max);
+0688       fig=mw.wplot;
+0689  <span class="keyword">end</span>
+0690      
+0691      
+0692         
+0693      
+0694      
+0695 
+0696 
+0697 
+0698 
+0699 
+0700 
+0701 
+0702 <span class="comment">%====================================================================</span>
+0703 <span class="comment">%- function flip</span>
+0704 <span class="comment">%- this function flip eigenimage and the corresponding temporal pattern.</span>
+0705 
+0706 
+0707 <a name="_sub4" href="#_subfunctions" class="code">function flag=ui_flip(mw)</a>
+0708     
+0709     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0710     flag=mw.flag;
+0711     <span class="keyword">if</span> mw.flag==0
+0712     <span class="keyword">return</span>;
+0713     <span class="keyword">else</span>
+0714 
+0715     tmp=mw.wedit_flip;
+0716     str_cur=get(tmp,<span class="string">'string'</span>);
+0717     cur=str2num(str_cur);
+0718     <span class="keyword">end</span>
+0719 
+0720     <span class="keyword">global</span> st
+0721     <span class="keyword">if</span> isempty(st)
+0722         <span class="keyword">return</span>;
+0723     <span class="keyword">end</span>
+0724      
+0725 
+0726     k=size(cur,2);
+0727 
+0728     <span class="keyword">for</span> i=1:k
+0729         <span class="keyword">if</span> isfield(st,<span class="string">'vols'</span>)&amp;isfield(st.vols{1},<span class="string">'pinfo'</span>)
+0730         st.vols{i}.pinfo=sign(cur(i))*st.vols{i}.pinfo;
+0731         <span class="keyword">end</span>
+0732     <span class="keyword">end</span>
+0733     spm_orthviews(<span class="string">'Redraw'</span>)
+0734     
+0735     flag=mw.flag;
+0736     set(mw.mw,<span class="string">'userdata'</span>,mw);
+0737 
+0738 <span class="comment">%====================================================================</span>
+0739 <span class="comment">%- function plot_spec</span>
+0740 <span class="comment">%- this function set option for the plot of the spectrum of the eigenvalues</span>
+0741 
+0742 
+0743 <a name="_sub5" href="#_subfunctions" class="code">function flag=ui_plotspec(mw,obj)</a>
+0744     
+0745     h=setxor(get(get(obj,<span class="string">'parent'</span>),<span class="string">'children'</span>),obj);
+0746     set(h,<span class="string">'checked'</span>,<span class="string">'off'</span>);
+0747     set(obj,<span class="string">'checked'</span>,<span class="string">'on'</span>);
+0748     
+0749     
+0750     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0751     mw.plotspec=get(obj,<span class="string">'label'</span>);
+0752     flag=mw.flag;
+0753     set(mw.mw,<span class="string">'userdata'</span>,mw);
+0754     
+0755   
+0756 <span class="comment">%====================================================================</span>
+0757 <span class="comment">%- to close proprely all the window</span>
+0758 
+0759 <a name="_sub6" href="#_subfunctions" class="code">function flag=ui_close(mw)</a>
+0760     
+0761     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0762      <span class="keyword">if</span> ~isempty(mw.wplot)
+0763             delete(mw.wplot);
+0764             mw.wplot=[];
+0765             set(mw.mw,<span class="string">'userdata'</span>,mw);
+0766 
+0767     <span class="keyword">end</span>
+0768     flag=mw.flag;
+0769     delete(mw.mw);
+0770     
+0771     
+0772 <span class="comment">%====================================================================</span>
+0773 <span class="comment">%- Zooming function : plot the spectrum of the eigenvalues.</span>
+0774 
+0775 <a name="_sub7" href="#_subfunctions" class="code">function flag=ui_zoom(mw)</a>
+0776 
+0777     mw=get(mw,<span class="string">'UserData'</span>); <span class="comment">% Get all data from the main Window.</span>
+0778     <span class="keyword">if</span> mw.flag==0 <span class="comment">%if no valid data return</span>
+0779     flag=0;
+0780     <span class="keyword">return</span>;
+0781     <span class="keyword">else</span>
+0782     flag=1;
+0783     eiglen    = length(mw.MDS.ds);
+0784     spacelen    = length(mw.MDS.Pmat);    
+0785     min=str2num(get(mw.wmin,<span class="string">'string'</span>));
+0786     max=str2num(get(mw.wmax,<span class="string">'string'</span>));
+0787     <span class="keyword">if</span>( isempty(min) | min &gt; max-1 |min &lt;1)
+0788         min=1;
+0789     <span class="keyword">end</span>
+0790     <span class="keyword">if</span>( isempty(max) | min &gt; max-1| max &gt; eiglen)
+0791         max=eiglen;
+0792     <span class="keyword">end</span>
+0793     
+0794     set(0,<span class="string">'currentfigure'</span>,mw.mw);
+0795     
+0796     <span class="keyword">switch</span>(lower(mw.plotspec))
+0797          <span class="keyword">case</span> <span class="string">'points'</span>
+0798            plot([min:max],mw.MDS.ds(min:max),<span class="string">'+'</span>);
+0799            
+0800 
+0801          <span class="keyword">case</span> <span class="string">'line'</span>
+0802            plot([min:max],mw.MDS.ds(min:max));
+0803 
+0804          <span class="keyword">case</span> <span class="string">'bar'</span>
+0805            bar([min:max],mw.MDS.ds(min:max));
+0806 
+0807     <span class="keyword">end</span>   
+0808        set(mw.area,<span class="string">'xlim'</span>,get(mw.area,<span class="string">'Xlim'</span>)+[-0.5 +0.5]);
+0809        set(mw.area,<span class="string">'Xgrid'</span>,<span class="string">'on'</span>);
+0810        set(mw.area,<span class="string">'Ygrid'</span>,<span class="string">'on'</span>);
+0811        legend(sprintf(<span class="string">'nb Space : %d \nnb Eigen  : %d'</span>,spacelen,eiglen));
+0812 
+0813     set(mw.wmin,<span class="string">'string'</span>,min);    
+0814         set(mw.wmax,<span class="string">'string'</span>,max);
+0815     
+0816 <span class="keyword">end</span>
+0817     
+0818 
+0819 
+0820 
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

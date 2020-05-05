@@ -1,0 +1,576 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MM</title>
+  <meta name="keywords" content="MM">
+  <meta name="description" content="Multivariate Methods. General multivariate tool.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for .&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>
+<h1>MM
+</h1>
+
+
+<h2><a name="_name"></a>NAME <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Multivariate Methods. General multivariate tool.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function  MM(typeAnal,argfile) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Multivariate Methods. General multivariate tool. 
+  Contains different procedures to explore FMRI or PET DATA
+ format [ds,u,Nvox] = MM(argfile,typeAnal) 
+ 
+ - INPUT   typeAnal: type of analyse: MLM or SVD.
+          argfile (optional) : batch file.
+          There is yet no documentation for the batch files ...
+ 
+ - OUTPUT   write eigenimages, other results are saved in MLM.mat or SVD.mat. 
+           Results can be be explored using the user interface function, mm_ui.
+
+
+ 
+ The standard way of using the MM package is to first perform a standard spm analysis,
+ that will provide a first apriori model and the corresponding estimated parameters
+ and residual sum of square images. As the temporal filter or the normalisation chosen 
+ is of importance, please keep in mind the parameters used for a meaningful interpretation
+ of your MM results.
+ 
+ MM embeds the concept of several spatial space such that if the regression model
+ is performed separately on several subjects (1..N) or regions of interest have the same 
+ temporal space, MM allows you to consider your data as a matrix with dimension
+ common-time-dim X (subject1-space-dim + subject2-space-dim +  ... + subjectN-space-dim)
+ In such a case, the result of the analysis for the first component is one time
+ dimension eigen vector and one space dimension vector with size :
+ (subject1-space-dim + subject2-space-dim +  ... + subjectN-space-dim), 
+ which can also be considered as one eigenimage per subject (or region of interest).
+  
+ More often, the MM is performed on a matrix with dimension
+ (subject1-time-dim + subject2-time-dim +  ... + subjectN-time-dim) X common-space-dim
+ 
+ 1) SVD analysis:   Given image files and a contrast of a general linear model, 
+              this procedure  perform PCA analysis on the projected data 
+             in the sub-space defined by the contrast. 
+             orthogonal projection allow to study the residual part of a model. 
+              
+ 2) MLM analysis: Given Beta images and a contrast of a general linear model this procedure
+              allow to study the relatiom between the data and the model.
+             MLM is adapted from Worsley et al (1997).
+ 
+----- References ----------
+ MLM : Worsley KJ, Poline JB, Friston KJ, Evans AC.
+ &quot;Characterizing the response of PET and fMRI data using multivariate linear models.&quot;
+ Neuroimage 1997 Nov;6(4):305-19  
+ SVD :  K.J. Friston, J.-B. Poline, S. Strother, A.P. Holmes, C.D. Frith, et
+ R.S.J.  Frackowiak, &quot;A multivariate analysis of PET activation
+ studies&quot; Human brain mapping. 4:140-151, 1996.
+
+================================================================================
+ CREDITS
+
+ This package was developped by Ferath Kherif primarily
+ with some help from Jean-Baptiste Poline, Guillaume Flandin and Philippe Ciuciu.
+ FK, JBP, PC are at the SHFJ-CEA in Orsay, France. GF is at EPIDAURE-INRIA, 
+ Sophia Antipolis, France, and at the SHFJ-CEA (year 2001).
+ 
+ A number of functions used in the toolbox belong to the SPM core package from the
+ Wellcome Department of Cognitive Neurology, (also distributed under GNU General 
+ Public License). See www.fil.ion.ucl.ac.uk
+
+ COPYING / DISTRIBUTING
+
+ You can redistribute it and/or modify it under the terms of the GNU General Public
+ License version 2 as published by the Free Software Foundation, which is displayed 
+ in the accompanying COPYING file. See the GNU General Public License for more
+ details. 
+
+ Please redirect requests for the toolbox to us. For bugs, remarks, additions, 
+ etc, please contact 
+                          mm@madic.org
+ 
+ If you are using this material for publication, please see with us how you can 
+ acknowledge our work.
+
+================================================================================
+ WARNING : THIS SOFTWARE IS DISTRIBUTED FREE WITHOUT ANY GUARANTY ! 
+================================================================================
+================================================================================
+-  Copyright (C) 1997-2002 CEA
+-  This software and supporting documentation were developed by
+-       CEA/DSV/SHFJ/UNAF
+-       4 place du General Leclerc
+-       91401 Orsay cedex
+-       France
+================================================================================
+</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+<li><a href="mm_arg.html" class="code" title="function varargout = mm_arg(typeAnal, argfile)">mm_arg</a>	Get arguments for MLM/SVD analysis.</li>
+<li><a href="mm_cpypy.html" class="code" title="function [YpY,Nvox]=mm_cpypy(typeAnal,nbsub,P,Mask,Res,paramsAnal,gsf,K,W)">mm_cpypy</a>	- compute y'y (time x time) dispersion matrix.</li>
+<li><a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>	definition and description of the input arguments for MLM/SVD analysis.</li>
+<li><a href="mm_model.html" class="code" title="function varargout = mm_model(varargin)">mm_model</a>	-  Set model sub-space of interest and the related matrix of normalisation and projection.</li>
+<li><a href="mm_readData.html" class="code" title="function varargout = mm_readData(varargin)">mm_readData</a>	Compute Dispersion matrix using BETA images (faster).</li>
+<li><a href="mm_ui.html" class="code" title="function mm_ui(action, varargin)">mm_ui</a>	- Interface functions for ploting MLM or SVD analysis</li>
+<li><a href="mm_writeEigImg.html" class="code" title="function varargout = mm_writeEigImg(varargin)">mm_writeEigImg</a>	Write Eigen Images</li>
+<li><a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>	Argument manager interface</li>
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>	Multivariate Methods. General multivariate tool.</li>
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function  MM(typeAnal,argfile)</a>
+0002 <span class="comment">% Multivariate Methods. General multivariate tool.</span>
+0003 <span class="comment">%  Contains different procedures to explore FMRI or PET DATA</span>
+0004 <span class="comment">% format [ds,u,Nvox] = MM(argfile,typeAnal)</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% - INPUT   typeAnal: type of analyse: MLM or SVD.</span>
+0007 <span class="comment">%          argfile (optional) : batch file.</span>
+0008 <span class="comment">%          There is yet no documentation for the batch files ...</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% - OUTPUT   write eigenimages, other results are saved in MLM.mat or SVD.mat.</span>
+0011 <span class="comment">%           Results can be be explored using the user interface function, mm_ui.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% The standard way of using the MM package is to first perform a standard spm analysis,</span>
+0016 <span class="comment">% that will provide a first apriori model and the corresponding estimated parameters</span>
+0017 <span class="comment">% and residual sum of square images. As the temporal filter or the normalisation chosen</span>
+0018 <span class="comment">% is of importance, please keep in mind the parameters used for a meaningful interpretation</span>
+0019 <span class="comment">% of your MM results.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% MM embeds the concept of several spatial space such that if the regression model</span>
+0022 <span class="comment">% is performed separately on several subjects (1..N) or regions of interest have the same</span>
+0023 <span class="comment">% temporal space, MM allows you to consider your data as a matrix with dimension</span>
+0024 <span class="comment">% common-time-dim X (subject1-space-dim + subject2-space-dim +  ... + subjectN-space-dim)</span>
+0025 <span class="comment">% In such a case, the result of the analysis for the first component is one time</span>
+0026 <span class="comment">% dimension eigen vector and one space dimension vector with size :</span>
+0027 <span class="comment">% (subject1-space-dim + subject2-space-dim +  ... + subjectN-space-dim),</span>
+0028 <span class="comment">% which can also be considered as one eigenimage per subject (or region of interest).</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% More often, the MM is performed on a matrix with dimension</span>
+0031 <span class="comment">% (subject1-time-dim + subject2-time-dim +  ... + subjectN-time-dim) X common-space-dim</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% 1) SVD analysis:   Given image files and a contrast of a general linear model,</span>
+0034 <span class="comment">%              this procedure  perform PCA analysis on the projected data</span>
+0035 <span class="comment">%             in the sub-space defined by the contrast.</span>
+0036 <span class="comment">%             orthogonal projection allow to study the residual part of a model.</span>
+0037 <span class="comment">%         </span>
+0038 <span class="comment">% 2) MLM analysis: Given Beta images and a contrast of a general linear model this procedure</span>
+0039 <span class="comment">%              allow to study the relatiom between the data and the model.</span>
+0040 <span class="comment">%             MLM is adapted from Worsley et al (1997).</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%----- References ----------</span>
+0043 <span class="comment">% MLM : Worsley KJ, Poline JB, Friston KJ, Evans AC.</span>
+0044 <span class="comment">% &quot;Characterizing the response of PET and fMRI data using multivariate linear models.&quot;</span>
+0045 <span class="comment">% Neuroimage 1997 Nov;6(4):305-19</span>
+0046 <span class="comment">% SVD :  K.J. Friston, J.-B. Poline, S. Strother, A.P. Holmes, C.D. Frith, et</span>
+0047 <span class="comment">% R.S.J.  Frackowiak, &quot;A multivariate analysis of PET activation</span>
+0048 <span class="comment">% studies&quot; Human brain mapping. 4:140-151, 1996.</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">%================================================================================</span>
+0051 <span class="comment">% CREDITS</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">% This package was developped by Ferath Kherif primarily</span>
+0054 <span class="comment">% with some help from Jean-Baptiste Poline, Guillaume Flandin and Philippe Ciuciu.</span>
+0055 <span class="comment">% FK, JBP, PC are at the SHFJ-CEA in Orsay, France. GF is at EPIDAURE-INRIA,</span>
+0056 <span class="comment">% Sophia Antipolis, France, and at the SHFJ-CEA (year 2001).</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% A number of functions used in the toolbox belong to the SPM core package from the</span>
+0059 <span class="comment">% Wellcome Department of Cognitive Neurology, (also distributed under GNU General</span>
+0060 <span class="comment">% Public License). See www.fil.ion.ucl.ac.uk</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% COPYING / DISTRIBUTING</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% You can redistribute it and/or modify it under the terms of the GNU General Public</span>
+0065 <span class="comment">% License version 2 as published by the Free Software Foundation, which is displayed</span>
+0066 <span class="comment">% in the accompanying COPYING file. See the GNU General Public License for more</span>
+0067 <span class="comment">% details.</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% Please redirect requests for the toolbox to us. For bugs, remarks, additions,</span>
+0070 <span class="comment">% etc, please contact</span>
+0071 <span class="comment">%                          mm@madic.org</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% If you are using this material for publication, please see with us how you can</span>
+0074 <span class="comment">% acknowledge our work.</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%================================================================================</span>
+0077 <span class="comment">% WARNING : THIS SOFTWARE IS DISTRIBUTED FREE WITHOUT ANY GUARANTY !</span>
+0078 <span class="comment">%================================================================================</span>
+0079 <span class="comment">%================================================================================</span>
+0080 <span class="comment">%-  Copyright (C) 1997-2002 CEA</span>
+0081 <span class="comment">%-  This software and supporting documentation were developed by</span>
+0082 <span class="comment">%-       CEA/DSV/SHFJ/UNAF</span>
+0083 <span class="comment">%-       4 place du General Leclerc</span>
+0084 <span class="comment">%-       91401 Orsay cedex</span>
+0085 <span class="comment">%-       France</span>
+0086 <span class="comment">%================================================================================</span>
+0087 
+0088  <span class="keyword">if</span> nargin == 0
+0089      start = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'start'</span>),<span class="string">'start'</span>);
+0090      <span class="keyword">switch</span> start
+0091          <span class="keyword">case</span> <span class="string">'Results'</span>
+0092             <a href="mm_ui.html" class="code" title="function mm_ui(action, varargin)">mm_ui</a>;
+0093             <span class="keyword">return</span>;
+0094         <span class="keyword">case</span> <span class="string">'Compute'</span>
+0095             typeAnal = <a href="ui_arg.html" class="code" title="function varargout = ui_arg(varargin)">ui_arg</a>(<a href="mm_load_arg.html" class="code" title="function mmArg = mm_load_arg(arg)">mm_load_arg</a>(<span class="string">'typeanal'</span>),<span class="string">'typeanal'</span>);
+0096              <a href="MM.html" class="code" title="function  MM(typeAnal,argfile)">MM</a>(typeAnal, []);
+0097              <span class="keyword">return</span>;
+0098         <span class="keyword">end</span>
+0099      
+0100  <span class="keyword">end</span>
+0101  
+0102  <span class="keyword">if</span> nargin == 1
+0103      argfile = <span class="string">''</span>;
+0104  <span class="keyword">end</span>
+0105 
+0106 
+0107 <span class="comment">%--------------------------------------------------------------------</span>
+0108 <span class="comment">%- Start Here</span>
+0109 <span class="comment">%--------------------------------------------------------------------</span>
+0110      
+0111               
+0112 disp(<span class="string">'___________________________________________________________'</span>)
+0113 disp(<span class="string">' __  __                                                    '</span>)
+0114 disp(<span class="string">'(  \/  )                                                   '</span>)
+0115 disp(<span class="string">' )    (ULTIVARIATE                                         '</span>)
+0116 disp(<span class="string">'(_/\/\_)                                                   '</span>)
+0117 disp(<span class="string">' __  __                                                    '</span>)
+0118 disp(<span class="string">'(  \/  )                                                   '</span>)
+0119 disp(<span class="string">' )    (ETHODS                                              '</span>)
+0120 disp(<span class="string">'(_/\/\_)                                                   '</span>)
+0121 disp(<span class="string">'___________________________________________________________'</span>)
+0122      
+0123 
+0124 drawnow <span class="comment">% flushes the event queue</span>
+0125 
+0126 
+0127 <span class="comment">%--------------------------------------------------------------------</span>
+0128 <span class="comment">%- Define structure for MLM or SVD paramters and results</span>
+0129 <span class="comment">%--------------------------------------------------------------------</span>
+0130 
+0131 
+0132 <span class="keyword">switch</span> typeAnal
+0133     
+0134     <span class="keyword">case</span> <span class="string">'MLM'</span>
+0135 
+0136         MLM = struct(<span class="keyword">...</span>
+0137            <span class="string">'Res'</span>, [],<span class="keyword">...</span><span class="comment">        %- filename of ResMS image</span>
+0138            <span class="string">'Mask'</span>, [],<span class="keyword">...</span><span class="comment">       %- filename of Mask image</span>
+0139            <span class="string">'xC'</span>, [],<span class="keyword">...</span><span class="comment">         %- contrast </span>
+0140            <span class="string">'sXG'</span>, [],<span class="keyword">...</span><span class="comment">    %- space of interest (def orthogonal to the space of non-interest)</span>
+0141            <span class="string">'ds'</span>, [],<span class="keyword">...</span><span class="comment">         %- eigen values</span>
+0142            <span class="string">'u'</span>,[],<span class="keyword">...</span><span class="comment">           %- eigen vector</span>
+0143            <span class="string">'Y'</span>,[],<span class="keyword">...</span><span class="comment">        %- observed temporal reponse </span>
+0144            <span class="string">'y'</span>,[],<span class="keyword">...</span><span class="comment">        %- predicted temporal reponse</span>
+0145            <span class="string">'Eig'</span>,[],<span class="keyword">...</span><span class="comment">         %- filename of eigen images</span>
+0146            <span class="string">'lEig'</span>,[],<span class="keyword">...</span><span class="comment">        %- link between eigen vectors and saved eigenimages.  </span>
+0147            <span class="string">'M12'</span>,[],<span class="keyword">...</span><span class="comment">         %- square root of (X'G V XG)</span>
+0148            <span class="string">'Nvox'</span>,[],<span class="keyword">...</span><span class="comment">        %- total number of voxel</span>
+0149            <span class="string">'NF'</span>,[],<span class="keyword">...</span><span class="comment">          %- matrix of normalisation</span>
+0150            <span class="string">'stat'</span>,[],<span class="keyword">...</span><span class="comment">        %- used by stat computation</span>
+0151            <span class="string">'description'</span>,[],<span class="keyword">...</span>
+0152            <span class="string">'paramsAnal'</span>,[],<span class="keyword">...</span><span class="comment">  %- Parameters </span>
+0153            <span class="string">'gSF'</span>,[]) ;          <span class="comment">%- global scaling factor</span>
+0154 
+0155     <span class="keyword">case</span> <span class="string">'SVD'</span>
+0156         SVD = struct(<span class="keyword">...</span>
+0157            <span class="string">'Res'</span>, [],<span class="keyword">...</span><span class="comment">        %- filename of ResMS image</span>
+0158            <span class="string">'Mask'</span>, [],<span class="keyword">...</span><span class="comment">       %- filename of Mask image</span>
+0159            <span class="string">'xC'</span>, [],<span class="keyword">...</span><span class="comment">         %- contrast </span>
+0160            <span class="string">'xX'</span>, [],<span class="keyword">...</span><span class="comment">            %- design matrix</span>
+0161            <span class="string">'ds'</span>, [],<span class="keyword">...</span><span class="comment">         %- eigen values</span>
+0162            <span class="string">'u'</span>,[],<span class="keyword">...</span><span class="comment">           %- eigen vector</span>
+0163            <span class="string">'v'</span>,[],<span class="keyword">...</span><span class="comment">           %- eigen vector</span>
+0164            <span class="string">'Eig'</span>,[],<span class="keyword">...</span><span class="comment">         %- filename of eigen images</span>
+0165            <span class="string">'LEig'</span>,[],<span class="keyword">...</span><span class="comment">        %- link between eigen vectors and saved eigenimages.</span>
+0166            <span class="string">'M12'</span>,[],<span class="keyword">...</span><span class="comment">         %- square root of (X'G V XG)</span>
+0167            <span class="string">'Nvox'</span>,[],<span class="keyword">...</span><span class="comment">        %- total number of voxel</span>
+0168            <span class="string">'NF'</span>,[],<span class="keyword">...</span><span class="comment">          %- matrix of normalisation</span>
+0169            <span class="string">'description'</span>,[],<span class="keyword">...</span>
+0170            <span class="string">'paramsAnal'</span>,[],<span class="keyword">...</span><span class="comment">  %- Parameters</span>
+0171            <span class="string">'gSF'</span>,[]) ;          <span class="comment">%- global scaling factor</span>
+0172     <span class="keyword">otherwise</span>
+0173         error(<span class="string">'unknown type of analysis'</span>)
+0174 <span class="keyword">end</span>
+0175     
+0176 
+0177 <span class="comment">%--------------------------------------------------------------------</span>
+0178 <span class="comment">%- Load input argument for the analysis</span>
+0179 <span class="comment">%--------------------------------------------------------------------</span>
+0180 
+0181 <span class="keyword">switch</span> typeAnal
+0182 
+0183    <span class="keyword">case</span> <span class="string">'MLM'</span>
+0184     [nbsub, Pimg, Res, Mask, Yimg, gcsd, cwd, csd, xC, <span class="keyword">...</span>
+0185             fname, gsf, Filter, leig, paramsAnal,W] = <a href="mm_arg.html" class="code" title="function varargout = mm_arg(typeAnal, argfile)">mm_arg</a>(typeAnal, argfile);
+0186     <span class="comment">%- nbsub     : number of subject</span>
+0187     <span class="comment">%- Pimg     : images filename, input data for the svd computation</span>
+0188     <span class="comment">%- cwd        : SPM.mat directory</span>
+0189     <span class="comment">%- csd        : directory for saving results</span>
+0190     <span class="comment">%- Xc         : contrast.</span>
+0191     <span class="comment">%- argfile     : parameter file</span>
+0192     
+0193     <span class="keyword">case</span> <span class="string">'SVD'</span>
+0194     [nbsub, Pimg, Res, Mask, gcsd, cwd, csd, xC, <span class="keyword">...</span>
+0195             Filter, paramsAnal, fname, leig, gsf] = <a href="mm_arg.html" class="code" title="function varargout = mm_arg(typeAnal, argfile)">mm_arg</a>(typeAnal, argfile);
+0196     <span class="keyword">otherwise</span>
+0197         error(<span class="string">'unknown type of analysis'</span>)
+0198 <span class="keyword">end</span>
+0199 
+0200 
+0201 <span class="comment">%--------------------------------------------------------------------</span>
+0202 <span class="comment">%- Set the model, the sub-space of interest and the normalised mtrix</span>
+0203 <span class="comment">%--------------------------------------------------------------------</span>
+0204 
+0205 <span class="comment">%- nu, h, d : degrees of freedom</span>
+0206 <span class="comment">%- NF : matrix of normalisation</span>
+0207 
+0208 fprintf(<span class="string">'%s%s%s\n'</span>,<span class="string">'............init '</span>,typeAnal,<span class="string">' Analysis'</span>);
+0209 <span class="keyword">switch</span> typeAnal
+0210     <span class="keyword">case</span> <span class="string">'MLM'</span>
+0211         [NF, nu, h, d, M12, XG, sXG] = <a href="mm_model.html" class="code" title="function varargout = mm_model(varargin)">mm_model</a>(typeAnal, cwd, nbsub, xC);
+0212     <span class="keyword">case</span> <span class="string">'SVD'</span>
+0213         [NF, h,RNF] = <a href="mm_model.html" class="code" title="function varargout = mm_model(varargin)">mm_model</a>(typeAnal, cwd, xC,paramsAnal);
+0214     <span class="keyword">otherwise</span>
+0215         error(<span class="string">'unknown type of analysis'</span>)
+0216 <span class="keyword">end</span>
+0217 
+0218 
+0219 
+0220 <span class="comment">%--------------------------------------------------------------------</span>
+0221 <span class="comment">%-  compute Y'*Y, for each subject if not exist.</span>
+0222 <span class="comment">%--------------------------------------------------------------------</span>
+0223 flag_gsf=1;
+0224 <span class="comment">%flag_gsf = ui_arg(mm_load_arg('GSF'),'GSF');</span>
+0225 
+0226 fprintf(<span class="string">'%-40s\n'</span>,<span class="string">'Initialising data covariance matrix'</span>) 
+0227 <span class="keyword">for</span> sub=1:nbsub
+0228     flag_ypy = 1;
+0229     <span class="keyword">if</span> ~exist(fullfile(cwd{sub},<span class="string">'YpY.mat'</span>))
+0230         flag_ypy = 0;
+0231     <span class="keyword">else</span> 
+0232         s_ypy=load(fullfile(cwd{sub},<span class="string">'YpY.mat'</span>),<span class="string">'paramsAnal'</span>);
+0233         fprintf(<span class="string">'%-40s\n'</span>,<span class="string">'Found already computed matrix'</span>)
+0234         fprintf(<span class="string">'%-40s\n'</span>,[<span class="string">'check:'</span> fullfile(cwd{sub},<span class="string">'YpY.mat'</span>)])
+0235         <span class="keyword">if</span> s_ypy.paramsAnal.divideByRessd ~= paramsAnal.divideByRessd
+0236             flag_ypy = 0;
+0237         <span class="keyword">end</span>
+0238 
+0239         <span class="keyword">if</span> s_ypy.paramsAnal.temporalFilter ~= paramsAnal.temporalFilter
+0240                 flag_ypy = 0;
+0241         <span class="keyword">end</span>
+0242         
+0243    <span class="keyword">end</span>
+0244    
+0245     <span class="keyword">if</span> ~flag_ypy;
+0246     fprintf(<span class="string">'%-40s\n'</span>,<span class="string">'Parameters are different: recompute data covariance matrix  '</span>)    
+0247     <span class="keyword">switch</span> typeAnal
+0248        <span class="keyword">case</span> <span class="string">'SVD'</span> 
+0249             
+0250          
+0251          
+0252             [YpY,nvox]    = <a href="mm_cpypy.html" class="code" title="function [YpY,Nvox]=mm_cpypy(typeAnal,nbsub,P,Mask,Res,paramsAnal,gsf,K,W)">mm_cpypy</a>(typeAnal,1, Pimg(sub), Mask(sub), Res(sub),<span class="keyword">...</span>
+0253                        paramsAnal, gsf(sub), Filter);
+0254             save(fullfile(cwd{sub},<span class="string">'YpY.mat'</span>), <span class="string">'YpY'</span>, <span class="string">'nvox'</span>,<span class="string">'paramsAnal'</span>);
+0255         
+0256       <span class="keyword">case</span> <span class="string">'MLM'</span>
+0257           
+0258           [YpY,nvox] = <a href="mm_cpypy.html" class="code" title="function [YpY,Nvox]=mm_cpypy(typeAnal,nbsub,P,Mask,Res,paramsAnal,gsf,K,W)">mm_cpypy</a>(typeAnal,1, Yimg(sub), Mask(sub), Res(sub),<span class="keyword">...</span>
+0259                        paramsAnal, gsf, Filter,W);
+0260           save(fullfile(cwd{sub},<span class="string">'YpY.mat'</span>), <span class="string">'YpY'</span>, <span class="string">'nvox'</span>,<span class="string">'paramsAnal'</span>);
+0261       <span class="keyword">end</span>
+0262       
+0263     <span class="keyword">end</span>
+0264 <span class="keyword">end</span>
+0265     
+0266     
+0267 <span class="comment">%--------------------------------------------------------------------</span>
+0268 <span class="comment">%- Load the Data, compute Z = NF'*Y'*Y*NF</span>
+0269 <span class="comment">%--------------------------------------------------------------------</span>
+0270 
+0271 
+0272 <span class="keyword">switch</span> typeAnal
+0273   <span class="keyword">case</span> <span class="string">'MLM'</span>
+0274     fprintf(<span class="string">'%-60s\n'</span>,<span class="string">'Computing parameters covariance matrix'</span>) 
+0275     [Z, Nvox,MU] = <a href="mm_readData.html" class="code" title="function varargout = mm_readData(varargin)">mm_readData</a>(typeAnal, NF, h, nbsub, Pimg, Res, Mask);
+0276     
+0277   <span class="keyword">case</span> <span class="string">'SVD'</span>
+0278     Z    = zeros(size(Pimg{1},1));
+0279     <span class="keyword">for</span> sub=1:nbsub
+0280         load(fullfile(cwd{sub},<span class="string">'YpY.mat'</span>));
+0281         Nvox(sub)     = nvox;
+0282         
+0283         <span class="comment">% NS{sub} = sum(sum(RNF.*YpY));</span>
+0284         <span class="comment">% YpY        = YpY/nvox;</span>
+0285         Z           = YpY + Z;
+0286     end    
+0287     clear YpY nvox;
+0288     Z    = NF*Z*NF';
+0289     
+0290   <span class="keyword">otherwise</span>
+0291     error(<span class="string">'unknown type of analysis'</span>)
+0292 <span class="keyword">end</span>
+0293 
+0294 
+0295 <span class="comment">%--------------------------------------------------------------------</span>
+0296 <span class="comment">%- Compute svd</span>
+0297 <span class="comment">%--------------------------------------------------------------------</span>
+0298 fprintf(<span class="string">'%-40s\n'</span>,<span class="string">'Computing Principal Components'</span>) 
+0299 Z    = Z/sum(Nvox);
+0300 [u s u] = svd(Z,0);
+0301 ds    = diag(s);
+0302 clear s;
+0303 
+0304 <span class="comment">%--------------------------------------------------------------------</span>
+0305 <span class="comment">%- STATISTICS if any ...</span>
+0306 <span class="comment">%--------------------------------------------------------------------</span>
+0307 
+0308 <span class="keyword">switch</span> typeAnal
+0309     
+0310     <span class="keyword">case</span> <span class="string">'MLM'</span>
+0311        <span class="comment">%- Fq : F values for the last q eigein values.</span>
+0312        <span class="comment">%- P  : P values.for the last q eigein values.</span>
+0313 
+0314        Fq= zeros(1,h);
+0315        <span class="keyword">for</span> q = 0:h-1;
+0316              nu1    = d*(h-q);
+0317             nu2    = d*nu - (d-1)*(4*(h-q)+2*nu)/(h-q+2);
+0318             Fq(q+1)    = ((nu-2)/nu) * nu2/(nu2-2)*sum(ds(q+1:h))/(h-q);
+0319        <span class="keyword">end</span>
+0320        Pf    = 1 - spm_Fcdf(Fq,round(nu1),round(nu2));
+0321     
+0322     <span class="keyword">case</span> <span class="string">'SVD'</span>
+0323        <span class="comment">%-</span>
+0324        
+0325     <span class="keyword">otherwise</span>
+0326         error(<span class="string">'unknown type of analysis'</span>)
+0327 end        
+0328 
+0329 
+0330 <span class="comment">%--------------------------------------------------------------------</span>
+0331 <span class="comment">%- Write Images for the results</span>
+0332 <span class="comment">%--------------------------------------------------------------------</span>
+0333 
+0334 <span class="comment">%- Eig         : eigenimages filenames</span>
+0335 <span class="comment">%- (by default computes up to 5 images)</span>
+0336 
+0337 fprintf(<span class="string">'%-40s\n'</span>,<span class="string">'writing EigenImage'</span>) 
+0338 leig     = leig(find(leig &gt;= 1 &amp; leig &lt;= size(u,2)));
+0339 
+0340 <span class="keyword">switch</span> typeAnal
+0341   <span class="keyword">case</span> <span class="string">'MLM'</span>
+0342     Eig    = <a href="mm_writeEigImg.html" class="code" title="function varargout = mm_writeEigImg(varargin)">mm_writeEigImg</a>(typeAnal, csd, nbsub, Pimg, Res, Mask, NF,<span class="keyword">...</span>
+0343                u(:,leig), ds, fname, h);
+0344   <span class="keyword">case</span> <span class="string">'SVD'</span>
+0345      <span class="keyword">if</span> ~flag_gsf
+0346              gsf{sub}=ones(size(gsf{sub}));
+0347      <span class="keyword">end</span>
+0348     Eig    = <a href="mm_writeEigImg.html" class="code" title="function varargout = mm_writeEigImg(varargin)">mm_writeEigImg</a>(typeAnal, csd, nbsub, Pimg, Res, Mask, NF,<span class="keyword">...</span>
+0349                u(:,leig), ds, fname, h, Filter, paramsAnal,gsf);
+0350     <span class="keyword">otherwise</span>
+0351     error(<span class="string">'unknown type of analysis'</span>)
+0352 <span class="keyword">end</span>
+0353 
+0354 <span class="comment">%--------------------------------------------------------------------</span>
+0355 <span class="comment">%- Evaluate predicted and observed temporal reponse</span>
+0356 <span class="comment">%--------------------------------------------------------------------</span>
+0357 
+0358 <span class="keyword">switch</span> typeAnal
+0359   <span class="keyword">case</span> <span class="string">'MLM'</span>    
+0360     fprintf(<span class="string">'%-40s\n'</span>,<span class="string">'Computing predicted and observed temporal reponse'</span>) 
+0361 
+0362     y    = (pinv(XG)'* M12 * u)*diag(sqrt(ds)); <span class="comment">% predicted temporal reponse</span>
+0363     
+0364     RG    = spm_sp(<span class="string">'r'</span>,sXG);
+0365     <span class="keyword">for</span> sub=1:nbsub
+0366            load(fullfile(cwd{sub},<span class="string">'YpY.mat'</span>),<span class="string">'YpY'</span>);
+0367            Y{sub}    = RG*(NF*pinv(XG)*YpY)'*u/diag(sqrt(ds)*sum(Nvox));<span class="comment">% observed temporal reponse</span>
+0368     <span class="keyword">end</span> 
+0369         
+0370   <span class="keyword">case</span> <span class="string">'SVD'</span>
+0371     <span class="comment">%</span>
+0372     <span class="keyword">otherwise</span>
+0373     <span class="comment">%error('unknown type of analysis')</span>
+0374 <span class="keyword">end</span>
+0375 
+0376 
+0377 
+0378 <span class="comment">%--------------------------------------------------------------------</span>
+0379 <span class="comment">%- Put the result in the MLM/SVD structure.</span>
+0380 <span class="comment">%--------------------------------------------------------------------</span>
+0381 
+0382 fprintf(<span class="string">'\n%-40s\n'</span>,sprintf(<span class="string">'Saving..... in %s (use mm_ui to explore the results)'</span>,gcsd)); 
+0383 <span class="keyword">switch</span> typeAnal
+0384     <span class="keyword">case</span> <span class="string">'MLM'</span>
+0385           
+0386         MLM.Res        = Res;
+0387         MLM.Mask    = Mask;
+0388         MLM.xC        = xC;
+0389         MLM.ds        = ds;
+0390         MLM.MU        = MU;
+0391         <span class="keyword">for</span> sub=1:nbsub
+0392             MLM.Pmat{sub}    = fullfile(cwd{sub},<span class="string">'SPM.mat'</span>);
+0393         <span class="keyword">end</span>
+0394         MLM.sXG        = sXG;
+0395         MLM.gSF        = gsf;
+0396         MLM.u        = u;
+0397         MLM.M12        = M12;
+0398         MLM.Eig        = Eig;
+0399         MLM.LEig    = leig;
+0400         MLM.Y        = Y;
+0401         MLM.y        = y;
+0402         MLM.Nvox    = Nvox;
+0403         MLM.NF        = NF;
+0404         MLM.stat    = struct(<span class="string">'X1orank'</span>,h,<span class="string">'erdf'</span>,nu,<span class="string">'ressel'</span>,d,<span class="string">'Pf'</span>,Pf);
+0405         MLM.paramsAnal  = paramsAnal;
+0406         save(fullfile(gcsd,<span class="string">'MLM.mat'</span>) ,<span class="string">'MLM'</span>);
+0407           
+0408        
+0409     <span class="keyword">case</span> <span class="string">'SVD'</span>
+0410         SVD.Res        = Res;
+0411         SVD.Mask    = Mask;
+0412         SVD.xC        = xC;
+0413         SVD.ds        = ds;
+0414         <span class="keyword">for</span> sub=1:nbsub
+0415             SVD.Pmat{sub}    = fullfile(cwd{sub},<span class="string">'SPM.mat'</span>);
+0416             SVD.gSF{sub}    = gsf{sub};
+0417         <span class="keyword">end</span>
+0418         
+0419         SVD.u        = u;
+0420             
+0421         SVD.Eig        = Eig;
+0422         SVD.LEig    =leig;
+0423         SVD.Nvox    = Nvox;
+0424         SVD.paramsAnal  = paramsAnal;
+0425         
+0426         
+0427         save(fullfile(gcsd,<span class="string">'SVD.mat'</span>) ,<span class="string">'SVD'</span>);
+0428 
+0429     <span class="keyword">otherwise</span>
+0430         error(<span class="string">'unknown type of analysis'</span>)
+0431 end        
+0432 
+0433 
+0434 <span class="comment">%--------------------------------------------------------------------</span>
+0435 <span class="comment">%--------------------------------------------------------------------</span>
+</pre></div>
+
+<hr><address>Generated at 14:28:16 27-Aug-2003 by <strong><a href="http://www.madic.org/download/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>
