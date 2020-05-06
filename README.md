@@ -55,7 +55,7 @@ Mulivariate analysis for Neuroimaging data.
 
  Please redirect requests for the toolbox to us. For bugs, remarks, additions, 
  etc, please contact 
-                          mm@madic.org
+                          ferath.kherif@chuv.ch
  
  If you are using this material for publication, please see with us how you can 
  acknowledge our work.
